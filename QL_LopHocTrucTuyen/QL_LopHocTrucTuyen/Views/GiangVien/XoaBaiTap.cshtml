@@ -1,0 +1,25 @@
+﻿@model QL_LopHocTrucTuyen.Models.BaiTap
+
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="text-center text-danger mb-4">Bạn có chắc muốn xoá bài tập này?</h3>
+            <hr />
+            <div class="mb-3">
+                <strong>Tên bài tập: </strong>
+                <p>@Model.TenBaiTap</p>
+            </div>
+            <hr />
+            @using (Html.BeginForm("XuLyXoaBaiTap", "GiangVien", FormMethod.Post, new { @class = "text-center mt-3" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="mabt" value="@Model.MaBaiTap" />
+                <div class="d-flex justify-content-center gap-3">
+                    <input type="submit" value="Xóa" class="btn btn-danger" />
+                    <a href="#" class="btn btn-secondary btn-lg ms-2" data-bs-dismiss="modal">Quay lại danh sách</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <script src="~/Content/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script src="~/Content/tinymce/js/tinymce/tinymce.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid m-0 p-0">
+        <div class="row m-0 p-0">
+            <div class="col-2 text-center m-0 p-0">
+                <a href="/GiangVien/Index">
+                    <img width="125" height="150" class="img-fluid" src="~/Content/HinhAnh/Base/education-high-resolution-logo.png" alt="Logo" />
+                </a>
+            </div>
+            <div class="col-10 d-flex align-items-center m-0 p-0">
+                <form class="d-flex mx-auto input-group w-50" action="/GiangVien/TimKiem" method="post">
+                    <input class="form-control" type="search" placeholder="Search" name="TenKhoaHoc" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                @if (Session["user"] != null)
+                {
+                    var user = Session["user"] as GiangVien;
+                    <a class="mx-3" href="/GiangVien/ThongTinNguoiDung" style="text-decoration:none">
+                        <img width="24" height="24" src="~/Content/HinhAnh/Base/user.png" />
+                        <span>@user.HoTen</span>
+                    </a>
+
+                }
+                else
+                {
+                    <a class="btn btn-outline-dark" href="/GiangVien/DangNhap">Đăng nhập</a>
+                }
+            </div>
+
+        </div>
+        <div class="row m-0 p-0">
+            <div class="col-12 m-0 p-0">
+                <nav class="navbar navbar-expand navbar-dark bg-dark">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mb-lg-0" style="font-size:16px; font-weight:bold">
+                                <li class="nav-item mx-2">
+                                    <a class="nav-link active" href="/GiangVien/Index">Trang chủ</a>
+                                </li>
+                                <li class="nav-item mx-2">
+                                    <a class="nav-link active" href="/GiangVien/HienThiKhoaHoc">Khoá học của bạn</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="row m-0 p-0">
+            <div class="col-12 m-0 p-0" style="min-height:700px">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="row m-0 p-0">
+            <div class="col-12 m-0 p-0">
+                <footer class="text-center" style="background-color: rgba(0, 0, 0, 0.05);">
+                    <div class="py-3 align-items-center">
+                        <a class="btn mx-2 p-0" href="#" aria-label="facebook">
+                            <img width="28" height="28" src="~/Content/HinhAnh/Base/fb.jpg" alt="facebook" />
+                        </a>
+                        <a class="btn mx-2 p-0" href="#" aria-label="LinkedIn">
+                            <img width="28" height="28" src="~/Content/HinhAnh/Base/linkedin.jpg" alt="LinkedIn" />
+                        </a>
+                        <a class="btn mx-2 p-0" href="#" aria-label="youtube">
+                            <img width="28" height="28" src="~/Content/HinhAnh/Base/youtube.jpg" alt="youtube" />
+                        </a>
+                        <a class="btn mx-2 p-0" href="#" aria-label="github">
+                            <img width="28" height="28" src="~/Content/HinhAnh/Base/github.png" alt="github" />
+                        </a>
+                        <a class="btn mx-2 p-0" href="#" aria-label="twitter">
+                            <img width="28" height="28" src="~/Content/HinhAnh/Base/twitter.png" alt="twitter" />
+                        </a>
+                    </div>
+                    <div class="text-center p-3">
+                        © 2024 Copyright:
+                        <a class="text-body" style="text-decoration:none;" href="#">Bình - Khánh - Thuận</a>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

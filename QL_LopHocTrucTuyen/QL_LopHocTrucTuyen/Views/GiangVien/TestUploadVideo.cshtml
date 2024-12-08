@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Test Upload Video";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+<h2>Test Upload Video</h2>
+
+<p>Tiêu đề bài giảng: ...</p>
+
+<form action="/GiangVien/XuLy_TestUploadVideo" method="post" enctype="multipart/form-data">
+
+    <div>
+        <label for="optionUpload">Lựa chọn hình thức tải video</label>
+        <select id="optionUpload" name="optionUpload" onchange="toggleUploadOption()" required>
+            <option value="file">Dạng file</option>
+            <option value="url">Dạng URL (YouTube)</option>
+        </select>
+    </div>
+
+    <div id="fileUpload" style="display:block">
+        <label for="video">Tải video:</label>
+        <input type="file" name="video" accept="video/*" />
+    </div>
+
+    <div id="urlUpload" style="display:none">
+        <label for="url">Tải URL:</label>
+        <input type="text" id="url" name="url" placeholder="https://www.youtube.com/watch?v=..." />
+
+
+        <button type="button" onclick="embedYoutubeVideo()">Xác nhận URL</button>
+    </div>
+
+    <input type="submit" name="Submit" value="Submit" />
+</form>
+
+
+<div id="youtubeEmbed"></div>
+
+<script type="text/javascript">
+    function toggleUploadOption() {
+        var uploadOption = document.getElementById('optionUpload').value;
+        document.getElementById('fileUpload').style.display = (uploadOption === 'file') ? 'block' : 'none';
+        document.getElementById('urlUpload').style.display = (uploadOption === 'url') ? 'block' : 'none';
+    }
+
+    document.getElementById('url').addEventListener('input', function () {
+        const url = this.value;
+        var embedUrl = 'https://www.youtube.com/embed/' + getYoutubeVideoId(url);
+        document.getElementById('embedUrl').value = videoId || ''; // Nếu không tìm thấy ID, để trống
+    });
+
+    function embedYoutubeVideo() {
+        var url = document.getElementById('url').value;
+
+        if (url) {
+            // Chuyển đổi URL YouTube thành dạng nhúng
+            var videoId = getYoutubeVideoId(url);
+            if (videoId) {
+                var embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                document.getElementById('url').value = embedUrl;
+                document.getElementById('youtubeEmbed').innerHTML =
+                    '<iframe width="560" height="315" src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>';
+            } else {
+                alert('URL YouTube không hợp lệ. Vui lòng kiểm tra lại.');
+            }
+        } else {
+            alert('Vui lòng nhập URL YouTube.');
+        }
+    }
+
+    function getYoutubeVideoId(url) {
+        var regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
+        var match = url.match(regex);
+        return match ? match[1] : null;
+    }
+</script>

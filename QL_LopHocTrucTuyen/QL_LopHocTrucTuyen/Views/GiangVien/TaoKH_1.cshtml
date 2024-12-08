@@ -1,0 +1,39 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+
+@model QL_LopHocTrucTuyen.Models.KhoaHoc
+
+<div class="modal-header">
+    <h5 class="modal-title">Tạo Khóa Học Mới</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+    </button>
+</div>
+<div class="modal-body">
+    @using (Html.BeginForm("XuLyTaoKH_1", "GiangVien", FormMethod.Post, new { id = "createKhoaHocForm" }))
+    {
+        <div class="form-group">
+            <p class="fw-bold">Tên khoá học</p>
+            @Html.TextBoxFor(model => model.TenKhoaHoc, new { @class = "form-control", placeholder = "Tên khoá học" })
+            @Html.ValidationMessageFor(model => model.TenKhoaHoc)
+        </div>
+        <div class="form-group">
+            <p class="fw-bold">Mô tả</p>
+            @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", placeholder = "Mô tả khoá học", rows = 4 })
+            @Html.ValidationMessageFor(model => model.MoTa)
+            <p>Giới hạn: 255 kí tự</p>
+        </div>
+        
+        <div class="form-group">
+            <p class="fw-bold">Loại khoá học</p>
+            @{
+                var lst = (List<LoaiKhoaHoc>)ViewBag.LoaiKhoaHocs;
+                @Html.DropDownListFor(model => model.MaLoaiKhoaHoc, new SelectList(lst, "MaLoaiKhoaHoc", "TenLoai"),
+                "Chọn loại khóa học",
+                new { @class = "form-select" })    
+            }
+            
+        </div>
+        
+        <button type="submit" class="btn btn-primary my-3">Tạo Khóa Học</button>
+    }
+</div>
+

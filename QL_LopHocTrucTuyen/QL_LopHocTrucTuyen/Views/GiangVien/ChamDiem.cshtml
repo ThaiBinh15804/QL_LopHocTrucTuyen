@@ -1,0 +1,93 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+@model QL_LopHocTrucTuyen.Models.DangKy_BaiTap
+
+@{
+    ViewBag.Title = "Chấm Điểm";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+@using (Html.BeginForm("XuLyChamDiem", "GiangVien", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(model => model.MaDangKy)
+    @Html.HiddenFor(model => model.MaBaiTap)
+
+    <div class="container mt-4">
+        <h2 class="text-center fw-bold">Chấm Điểm Bài Tập</h2>
+        <div class="row">
+            <!-- Phần thông tin bài tập -->
+            <div class="col-12 mb-3">
+                <fieldset class="border p-4 rounded">
+                    <div class="form-group mb-3 row">
+                        <label class="form-label col-md-2">Tên Bài Tập:</label>
+                        <div class="col-md-10">
+                            <p class="form-control-plaintext fw-bold">@Model.BaiTap.TenBaiTap</p>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 row">
+                        <label class="form-label col-md-2">Tên Học Viên:</label>
+                        <div class="col-md-10">
+                            <p class="form-control-plaintext fw-bold">@Model.DangKy.ChiTietThanhToan.ThanhToan.HocVien.HoTen</p>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 row">
+                        @Html.LabelFor(model => model.NgayNop, "Ngày Nộp", new { @class = "form-label col-md-2" })
+                        <div class="col-md-10">
+                            <p class="form-control-plaintext fw-bold">@Html.DisplayFor(model => model.NgayNop)</p>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 row">
+                        @Html.LabelFor(model => model.Diem, "Điểm", new { @class = "form-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Diem, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Diem, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 row">
+                        @Html.Label("Tệp Tải Lên", new { @class = "form-label col-md-2" })
+                        <div class="col-md-10">
+                            @{
+    if (!string.IsNullOrEmpty(Model.FileUpload))
+    {
+        string fileExtension = System.IO.Path.GetExtension(Model.FileUpload).ToLower();
+        if (fileExtension == ".pdf")
+        {
+    <iframe src="~/Content/File/DangKy_BaiTap/@Url.Content(Model.FileUpload)" class="w-100" style="height: 500px;" frameborder="0"></iframe>
+        }
+        else if (fileExtension == ".doc" || fileExtension == ".docx")
+        {
+                                            <p>
+                                                Tệp Word: <a href="@Url.Content(Model.FileUpload)" target="_blank" class="btn btn-link">Tải xuống</a> hoặc xem trực tiếp.
+                                            </p>
+                                    }
+                                    else
+                                    {
+                                            <p>
+                                                <a href="@Url.Content(Model.FileUpload)" target="_blank" class="btn btn-link">Tải xuống tệp</a>
+                                            </p>
+                                    }
+                                }
+                                else
+                                {
+                                            <p class="text-muted">Không có tệp tải lên.</p>
+                                }
+                            }
+                        </div>
+                    </div>
+
+
+
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center my-3">
+            <div>
+                <input type="submit" value="Lưu" class="btn btn-primary btn-lg me-2" />
+                <button class="btn btn-secondary btn btn-secondary btn-lg" onclick="window.history.back()">Quay lại</button>
+            </div>
+        </div>
+    </div>
+}

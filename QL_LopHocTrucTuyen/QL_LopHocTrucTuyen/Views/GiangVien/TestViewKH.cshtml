@@ -1,0 +1,47 @@
+﻿@model IEnumerable<QL_LopHocTrucTuyen.Models.KhoaHoc>
+
+@{
+    ViewBag.Title = "TestViewKH";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+<a class="btn btn-dark" href="#" data-bs-toggle="modal" data-bs-target="#createKhoaHocModal">
+    Tạo khoá học mới
+</a>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-3">
+            <div class="card">
+                @if (item.AnhBia != null)
+                {
+                    <img src="~/Content/GiangVien/HinhAnh/KhoaHoc/@Html.DisplayFor(modelItem => item.AnhBia)" class="card-img-top" alt="Ảnh bìa" style="height: 200px">
+                }
+                else
+                {
+                    <img src="~/Content/GiangVien/HinhAnh/Base/education-high-resolution-logo.png" class="card-img-top" alt="Ảnh bìa mặc định" style="height: 200px">
+                }
+                <div class="card-body py-2" style="height:200px">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.TenKhoaHoc)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Gia)</p>
+                    <a href="/GiangVien/KhoaHoc/?makh=@Html.DisplayFor(modelItem => item.MaKhoaHoc)" class="btn btn-primary">Chi tiết</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<div class="modal fade" id="createKhoaHocModal" tabindex="-1" role="dialog" aria-labelledby="createKhoaHocModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div id="createKhoaHocContent">
+                @* Gọi Action để render nội dung PartialView *@
+                @Html.Action("TaoKH_1", "GiangVien")
+            </div>
+        </div>
+    </div>
+</div>
+
+

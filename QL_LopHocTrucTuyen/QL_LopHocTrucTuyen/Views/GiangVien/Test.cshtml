@@ -1,0 +1,108 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+
+@model QL_LopHocTrucTuyen.Models.KhoaHoc
+
+@{
+    ViewBag.Title = "Test";
+}
+
+<h2>Test</h2>
+
+<fieldset>
+    <legend>KhoaHoc</legend>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.MaLoaiKhoaHoc)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MaLoaiKhoaHoc)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.TenKhoaHoc)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TenKhoaHoc)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.MoTa)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MoTa)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.NgayBatDau)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.NgayBatDau)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.NgayKetThuc)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.NgayKetThuc)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Gia)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Gia)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.MaGiangVien)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MaGiangVien)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.AnhBia)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AnhBia)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.TrangThai)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TrangThai)
+    </div>
+</fieldset>
+
+<div>
+    <h3>Danh sách chương:</h3>
+    @if (Model.Chuongs != null && Model.Chuongs.Any())
+    {
+        foreach (var item in Model.Chuongs)
+        {
+            <p>Tên Chương: @item.TenChuong</p>
+            if (item.BaiGiangs != null && item.BaiGiangs.Any())
+            {
+                <p>Bài giảng trong chương:</p>
+                foreach (var bg in item.BaiGiangs)
+                {
+                    <p>- @bg.TenBaiGiang</p>
+                }
+            }
+            else
+            {
+                <p>- Không có bài giảng nào trong chương này.</p>
+            }
+        }
+    }
+    else
+    {
+        <p>Không có chương nào trong khóa học này.</p>
+    }
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MaKhoaHoc }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

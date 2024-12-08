@@ -1,0 +1,199 @@
+﻿@model QL_LopHocTrucTuyen.Models.BaiGiang
+
+@{
+    ViewBag.Title = "Sửa Bài Giảng";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+@using (Html.BeginForm("XuLySuaBaiGiang", "GiangVien", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(model => model.MaBaiGiang)
+    @Html.HiddenFor(model => model.MaChuong)
+
+    <div class="row m-3">
+        <!-- Phần nội dung bài giảng: col-8 -->
+        <div class="col-md-7">
+            <fieldset class="border p-3">
+                <legend class="w-auto fw-bold">Nội dung Bài Giảng</legend>
+
+                <div class="form-group mb-3">
+                    <!-- Textarea cho nội dung bài giảng -->
+                    <textarea id="editor" name="NoiDung" class="form-control" rows="10">
+                        @Html.DisplayFor(model => model.NoiDung)
+                    </textarea>
+                    @Html.ValidationMessageFor(model => model.NoiDung, "", new { @class = "text-danger" })
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Phần thông tin cơ bản và video: col-4 -->
+        <div class="col-md-5">
+            <fieldset class="border p-3 mb-3">
+                <legend class="w-auto fw-bold">Thiết lập Bài Giảng</legend>
+
+                <!-- Tên Bài Giảng -->
+                <div class="form-group row mb-3">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.TenBaiGiang, "Tên Bài Giảng", new { @class = "form-label" })
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TenBaiGiang, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenBaiGiang, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Thứ Tự -->
+                <div class="form-group row mb-3">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.ThuTu, "Thứ Tự", new { @class = "form-label" })
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ThuTu, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ThuTu, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="border p-3">
+                <legend class="w-auto fw-bold">Video Bài Giảng</legend>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Chọn cách thêm video</label>
+                    <div class="form-check">
+                        <input type="radio" id="videoUrlOption" name="VideoOption" value="url" class="form-check-input"
+                               @(Model.URL != null || !string.IsNullOrEmpty(Model.URL) ? "checked" : "") />
+                        <label class="form-check-label" for="videoUrlOption">Nhúng từ URL</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" id="videoFileOption" name="VideoOption" value="file" class="form-check-input"
+                               @(Model.FileVideo != null || !string.IsNullOrEmpty(Model.FileVideo) ? "checked" : "") />
+                        <label class="form-check-label" for="videoFileOption">Tải lên file</label>
+                    </div>
+                </div>
+
+                <!-- URL Video -->
+                <div id="videoUrlInput" class="form-group mb-4" style="display: @(Model.URL != null || !string.IsNullOrEmpty(Model.URL) ? "block" : "none")">
+                    @Html.LabelFor(model => model.URL, "URL Video", new { @class = "form-label" })
+
+                    <div class="input-group mb-2">
+                        @Html.TextBoxFor(model => model.URL, new { @class = "form-control", @id = "videoUrl", @placeholder = "Nhập URL video...", value = Model.URL })
+                        <button type="button" class="btn btn-secondary" onclick="embedYoutubeVideo()">Kiểm tra</button>
+                    </div>
+
+                    @Html.ValidationMessageFor(model => model.URL, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- File Upload -->
+                <div id="videoFileInput" class="form-group mb-3" style="display: @(Model.FileVideo != null || !string.IsNullOrEmpty(Model.FileVideo) ? "block" : "none")">
+                    @Html.LabelFor(model => model.FileVideo, "File Video", new { @class = "form-label" })
+                    <input type="file" id="FileVideo" name="FileVideo" class="form-control" onchange="previewVideo(this);" value="@Model.FileVideo" />
+                    @Html.ValidationMessageFor(model => model.FileVideo, "", new { @class = "text-danger" })
+
+                    @if (!string.IsNullOrEmpty(Model.FileVideo))
+                    {
+                        <div id="uploadedVideoMessage">
+                            <strong>Video đã tải lên:</strong> @Model.FileVideo
+                        </div>
+                    }
+                </div>
+
+                <div id="youtubeEmbed" class="mt-3">
+                    @if (!string.IsNullOrEmpty(Model.URL))
+                    {
+                        <script>
+                            var url = '@Model.URL';
+                            var videoId = getYoutubeVideoId(url);
+                            if (videoId) {
+                                var embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                                document.write('<iframe width="100%" height="315" src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>');
+                            }
+                        </script>
+                    }
+                    else if (!string.IsNullOrEmpty(Model.FileVideo))
+                    {
+                        var fileUrl = Url.Content("~/Content/GiangVien/Video/" + Model.FileVideo);
+                        <video style="width:100%; height:315px;" controls>
+                            <source src="@fileUrl" type="video/mp4">Your browser does not support the video tag.
+                        </video>
+                    }
+                </div>
+            </fieldset>
+
+            <div class="mt-4">
+                <input type="submit" value="Lưu Thay Đổi" class="btn btn-primary" />
+                <a href="/GiangVien/KhoaHoc/?makh=@Model.Chuong.MaKhoaHoc" class="btn btn-danger">Huỷ</a>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    tinymce.init({
+        selector: '#editor', // Selector cho textarea
+        height: 300, // Chiều cao của trình soạn thảo
+        menubar: false, // Ẩn menu bar nếu không cần
+        plugins: 'lists link image preview', // Các plugin cần thiết
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview', // Thanh công cụ
+        branding: false // Ẩn branding TinyMCE
+    });
+
+    // Ẩn/hiện tùy chọn video
+    document.querySelectorAll('input[name="VideoOption"]').forEach(function (elem) {
+        elem.addEventListener("change", function () {
+            if (this.value === "url") {
+                document.getElementById("videoUrlInput").style.display = "block";
+                document.getElementById("videoFileInput").style.display = "none";
+                document.getElementById("youtubeEmbed").innerHTML = ""; // Xóa nội dung video trước đó
+
+            } else {
+                document.getElementById("videoUrlInput").style.display = "none";
+                document.getElementById("videoFileInput").style.display = "block";
+                document.getElementById("youtubeEmbed").innerHTML = ""; // Xóa nội dung video trước đó
+
+            }
+        });
+    });
+
+    function embedYoutubeVideo() {
+        var url = document.getElementById("videoUrl").value;
+        if (url) {
+            var videoId = getYoutubeVideoId(url);
+            if (videoId) {
+                document.getElementById("FileVideo").value = "";
+                var embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                document.getElementById('youtubeEmbed').innerHTML =
+                    '<iframe width="100%" height="315" src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>';
+            } else {
+                alert('URL YouTube không hợp lệ. Vui lòng kiểm tra lại.');
+            }
+        } else {
+            alert('Vui lòng nhập URL YouTube.');
+        }
+    }
+
+    function getYoutubeVideoId(url) {
+        var regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
+        var match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
+    function previewVideo(input) {
+        var file = input.files[0]; // Lấy tệp đầu tiên từ input
+
+        if (file) {
+            // Tạo URL tạm thời cho file
+            var videoUrl = URL.createObjectURL(file);
+            document.getElementById("videoUrl").value = ""; // Xóa input URL nếu có
+            document.getElementById('youtubeEmbed').innerHTML =
+                '<video width="100%" height="315" controls><source src="' + videoUrl + '" type="' + file.type + '">Your browser does not support the video tag.</video>';
+
+            document.getElementById("uploadedVideoMessage").style.display = "none";
+        } else {
+            // Xử lý khi không có file
+            document.getElementById('youtubeEmbed').innerHTML = "No file selected.";
+        }
+    }
+</script>

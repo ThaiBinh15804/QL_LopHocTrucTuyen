@@ -1,0 +1,79 @@
+﻿@model QL_LopHocTrucTuyen.Models.GiangVien
+
+@{
+    ViewBag.Title = "Thông Tin Giảng Viên";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+<div class="container my-4">
+    <form action="/GiangVien/SuaThongTinNguoiDung" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <!-- Cột bên trái: Hình đại diện và tên giảng viên -->
+            <div class="col-md-3 text-center">
+                <div class="card shadow-sm p-3 mb-4">
+                    <div class="d-flex flex-column align-items-center">
+                        <img id="previewImage" src="@(string.IsNullOrEmpty(Model.NguoiDung.AnhDaiDien) ? Url.Content("~/Content/HinhAnh/Base/user.png") : Url.Content("~/Content/HinhAnh/Avatar/" + Model.NguoiDung.AnhDaiDien))"
+                             class="rounded-circle mb-3" width="100" height="100" alt="Avatar" />
+                        <h4 class="mt-2 mb-3 d-flex justify-content-center">
+                            <input type="text" class="form-control" name="hoten" value="@Model.HoTen" />
+                        </h4>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('imageUpload').click();">Thay đổi ảnh</button>
+                        <input type="file" id="imageUpload" name="anh" onchange="previewNewImage(event)" class="d-none" accept="image/*" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột bên phải: Thông tin chi tiết -->
+            <div class="col-md-9">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Thông Tin Giảng Viên</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label><strong>Chuyên ngành:</strong></label>
+                                <input type="text" name="chuyennganh" class="form-control" value="@Model.ChuyenNganh" id="chuyenNganhInput" />
+                            </div>
+                            <div class="col-md-6">
+                                <label><strong>Số điện thoại:</strong></label>
+                                <div class="input-group">
+                                    <input type="text" name="sdt" class="form-control" value="@Model.SoDienThoai" id="soDienThoaiInput" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3">
+                                <label><strong>Địa chỉ:</strong></label>
+                                <input type="text" name="diachi" class="form-control" value="@Model.DiaChi" id="diaChiInput" />
+                            </div>
+                            <div class="col-md-6 mt-3">
+                                <label><strong>Ngày gia nhập:</strong></label>
+                                <input type="text" name="ngaygianhap" class="form-control" value="@Model.NguoiDung.NgayTao.ToShortDateString()" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3" id="updateButton">Lưu thay đổi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function previewNewImage(event) {
+        const imagePreview = document.getElementById('previewImage');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block'; // Hiện ảnh preview
+            }
+            reader.readAsDataURL(file);
+        } else {
+            // Nếu không có file thì ẩn ảnh preview
+            imagePreview.src = '';
+            imagePreview.style.display = 'none';
+        }
+    }
+</script>

@@ -1,0 +1,89 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+
+@model IEnumerable<QL_LopHocTrucTuyen.Models.KhoaHoc>
+
+@{
+    ViewBag.Title = "BoLoc";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <!-- Sidebar for Filtering -->
+        <div class="col-md-3">
+            <form action="/GiangVien/XuLyBoLoc" method="post" class="p-3 border rounded shadow-sm bg-light">
+                <h5 class="mb-3">Bộ lọc tìm kiếm</h5>
+
+                <!-- Search by Name -->
+                <div class="mb-3 fw-bold">
+                    <label for="TenKhoaHoc" class="form-label">Tìm theo tên</label>
+                    <input type="text" name="TenKhoaHoc" class="form-control" id="search-name" placeholder="Nhập tên khóa học">
+                </div>
+
+                <!-- Course Type -->
+                <div class="mb-3">
+                    @Html.Action("LoaiKhoaHocList")
+                </div>
+
+                <!-- Status -->
+                <div class="mb-3 ">
+                    <label class="form-label fw-bold">Trạng thái</label>
+                    <div class="form-check">
+                        <input type="radio" name="TrangThai" id="approved" value="true" class="form-check-input">
+                        <label for="approved" class="form-check-label">Đã duyệt</label>
+                    </div>
+                    <div class="form-check fw-bold">
+                        <input type="radio" name="TrangThai" id="pending" value="false" class="form-check-input">
+                        <label for="pending" class="form-check-label">Chưa duyệt</label>
+                    </div>
+                </div>
+
+                <div class="mb-3 border rounded-2 p-2">
+                    <p class="fw-bold mb-2">Khoảng thời gian muốn bắt đầu học</p>
+                    <div class="mb-3">
+                        <label for="start-date" class="form-label">Mốc bắt đầu</label>
+                        <input type="date" name="NgayBD" class="form-control" value="" id="start-date">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="end-date" class="form-label">Mốc kết thúc</label>
+                        <input type="date" name="NgayKT" class="form-control" value="" id="end-date">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </form>
+        </div>
+
+        <!-- Courses Display -->
+        <div class="col-md-9">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            @if (item.AnhBia != null)
+                            {
+                                <img src="~/Content/HinhAnh/KhoaHoc/@Html.DisplayFor(modelItem => item.AnhBia)" class="card-img-top" alt="Ảnh bìa" style="height: 200px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <img src="~/Content/HinhAnh/Base/education-high-resolution-logo.png" class="card-img-top" alt="Ảnh bìa mặc định" style="height: 200px; object-fit: cover;">
+                            }
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => item.TenKhoaHoc)</h5>
+                                <p class="mt-2">
+                                    Trạng thái: <span class="badge bg-success">Đã duyệt</span>
+                                </p>
+                                <div class="mt-auto">
+                                    <a href="/GiangVien/KhoaHoc/?makh=@Html.DisplayFor(modelItem => item.MaKhoaHoc)" class="btn btn-primary">Chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>

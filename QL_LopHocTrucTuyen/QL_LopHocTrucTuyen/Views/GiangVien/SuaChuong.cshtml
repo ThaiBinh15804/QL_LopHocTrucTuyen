@@ -1,0 +1,44 @@
+﻿@model QL_LopHocTrucTuyen.Models.Chuong
+
+<!-- Modal Header -->
+<div class="modal-header">
+    <h5 class="modal-title">Sửa Chương</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Modal Body -->
+<div class="modal-body">
+    @using (Html.BeginForm("XuLySuaChuong", "GiangVien", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <!-- Model -->
+        @Html.HiddenFor(model => model.MaChuong)
+        @Html.HiddenFor(model => model.MaKhoaHoc)
+
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.TenChuong, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(model => model.TenChuong, new { @class = "form-control", placeholder = "Tên chương" })
+            @Html.ValidationMessageFor(model => model.TenChuong, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.MoTa, new { @class = "form-label fw-bold" })
+            @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", placeholder = "Mô tả chương", rows = 4 })
+            @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ThuTu, new { @class = "form-label fw-bold" })
+            @Html.TextBoxFor(model => model.ThuTu, new { @class = "form-control", type = "number", min = "0", placeholder = "Thứ tự" })
+            @Html.ValidationMessageFor(model => model.ThuTu, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Button Section -->
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a href="#" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Quay lại danh sách</a>
+        </div>
+    }
+</div>

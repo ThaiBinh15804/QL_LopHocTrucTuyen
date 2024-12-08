@@ -1,0 +1,107 @@
+﻿@model QL_LopHocTrucTuyen.Models.BaiTap
+
+@{
+    ViewBag.Title = "SuaBaiTap";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+@using (Html.BeginForm("XuLySuaBaiTap", "GiangVien", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(model => model.MaBaiTap)
+    @Html.HiddenFor(model => model.MaChuong)
+
+    <div class="row m-3">
+        <!-- Phần chỉnh sửa -->
+        <div class="col-md-4">
+            <fieldset class="border p-3">
+                <div class="form-group row mb-3">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.TenBaiTap, "Tên Bài Tập", new { @class = "form-label" })
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TenBaiTap, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenBaiTap, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.MoTa, "Mô tả", new { @class = "form-label" })
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.MoTa, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.ThuTu, "Thứ Tự", new { @class = "form-label" })
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ThuTu, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ThuTu, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-4">
+                        @Html.Label("Upload File", new { @class = "form-label" })
+                    </div>
+                    <div class="col-md-8">
+                        <input type="file" name="UploadedFile" class="form-control" onchange="previewFile(this)" id="fileInput" />
+                        @Html.ValidationMessage("UploadedFile", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="mt-4">
+                <input type="submit" value="Lưu Thay Đổi" class="btn btn-primary" />
+                <a href="/GiangVien/KhoaHoc/?makh=@Model.Chuong.MaKhoaHoc" class="btn btn-danger">Huỷ</a>
+            </div>
+        </div>
+
+        <!-- Phần hiển thị -->
+        <div class="col-md-8">
+            <fieldset id="file">
+                @if (!string.IsNullOrEmpty(Model.FileUpload) && System.IO.File.Exists(Server.MapPath("~/Content/File/BaiTap/" + Model.FileUpload)))
+                {
+            <!-- Hiển thị file upload -->
+                    <iframe id="fileFrame"
+                            src="@Url.Content("~/Content/File/BaiTap/" + Model.FileUpload)"
+                            style="width:100%; height:600px"
+                            frameborder="1"
+                            allowfullscreen></iframe>
+                }
+                else
+                {
+            <!-- Hiển thị thông báo lỗi -->
+                    <div class="alert alert-danger">
+                        Không tìm thấy file. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.
+                    </div>
+                }
+            </fieldset>
+        </div>
+
+    </div>
+}
+
+<script>
+    function previewFile(input) {
+        var file = input.files[0]; // Lấy tệp đầu tiên từ input
+
+        if (file) {
+            // Tạo URL tạm thời cho file
+            var videoUrl = URL.createObjectURL(file);
+            document.getElementById('file').innerHTML =
+                '<iframe id="fileFrame" src="' + videoUrl + '" style="width:100%; height:600px" frameborder="1" allowfullscreen></iframe>';
+
+        } else {
+            // Xử lý khi không có file
+            document.getElementById('file').innerHTML = "No file selected.";
+        }
+    }
+</script>

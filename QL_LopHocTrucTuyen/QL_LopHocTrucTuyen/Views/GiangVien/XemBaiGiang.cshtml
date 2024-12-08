@@ -1,0 +1,99 @@
+﻿@model QL_LopHocTrucTuyen.Models.BaiGiang
+
+@{
+    ViewBag.Title = "XemBaiGiang";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+
+<script>
+    function getYoutubeVideoId(url) {
+        var regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
+        var match = url.match(regex);
+        return match ? match[1] : null;
+    }
+</script>
+
+<div>
+    <a href="@Url.Action("KhoaHoc", "GiangVien", new { makh = Model.Chuong.MaKhoaHoc })" class="btn btn-light m-3 border-dark rounded-pill"><i class="fa-solid fa-arrow-left m-2"></i>Trở lại khóa học</a>
+</div>
+
+<div class="container my-3">
+    <h1>@Model.TenBaiGiang</h1>
+
+    <div class="card mb-2">
+        <div class="card-body">
+            
+
+            @* Hiển thị video nếu có *@
+            @if (!string.IsNullOrEmpty(Model.URL) || !string.IsNullOrEmpty(Model.FileVideo))
+            {
+                <div class="mb-4">
+                    @if (!string.IsNullOrEmpty(Model.URL))
+                    {
+                        <script>
+                            var url = '@Model.URL';
+                            var videoId = getYoutubeVideoId(url);
+                            if (videoId) {
+                                var embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                                document.write('<iframe style="width:100%; height:630px;"  src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe>');
+                            }
+                        </script>
+                        
+                    }
+                    else if (!string.IsNullOrEmpty(Model.FileVideo))
+                    {
+                        var fileUrl = Url.Content("~/Content/Video/" + Model.FileVideo);
+                        <video id="my-video" class="video-js" controls preload="auto" style="width:100%; height:630px;" data-setup="{}">
+                            <source src="@fileUrl" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    }
+                </div>
+            }
+            @* Hiển thị nội dung bài giảng *@
+            @if (!string.IsNullOrEmpty(Model.NoiDung))
+            {
+                <hr />
+                <div class="mb-3">
+                    @Html.Raw(Model.NoiDung)
+                </div>
+            }
+        </div>
+    </div>
+
+    @* Nút hiển thị phần comment *@
+    <button class="btn btn-outline-primary" id="toggleComments">Hiển thị bình luận</button>
+
+    @* Phần bình luận *@
+    <div id="commentsSection" class="mt-4" style="display: none;">
+        @Html.Action("XemBinhLuan", new { mabg = Model.MaBaiGiang })
+
+
+        <form action="/GiangVien/ThemBinhLuan/?mabg=@Model.MaBaiGiang" method="post">
+            <div class="form-group mt-3">
+                <textarea id="newComment" name="binhluanmoi" class="form-control" rows="3" placeholder="Nhập bình luận của bạn"></textarea>
+                <button type="submit" class="btn btn-primary mt-2">Bình luận</button>
+            </div>
+
+        </form>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    document.getElementById("toggleComments").onclick = function () {
+        var commentsSection = document.getElementById("commentsSection");
+        if (commentsSection.style.display === "none") {
+            commentsSection.style.display = "block";
+            this.textContent = "Ẩn bình luận";
+        } else {
+            commentsSection.style.display = "none";
+            this.textContent = "Hiển thị bình luận";
+        }
+    };
+
+</script>

@@ -1,0 +1,54 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+
+@model IEnumerable<QL_LopHocTrucTuyen.Models.HocVien>
+
+<div class="container my-4">
+    <h4 class="fw-bold mb-3">Danh sách học viên</h4>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Tên học viên</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phần trăm hoàn thành</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var hocvien in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@hocvien.HoTen</td>
+                            <td>@hocvien.NguoiDung.Email</td>
+                            @{
+                                int dahoc = hocvien.ThanhToans.Sum(t => 
+                                t.ChiTietThanhToans.Sum(c => c.DangKies.Sum(d => 
+                                d.ThamGias.Where(m => m.BaiGiang.Chuong.MaKhoaHoc == ViewBag.MaKhoaHoc).Count())));
+                                            
+                                int tong = ViewBag.TongBaiGiang;
+
+                                // Kiểm tra nếu tổng số bài giảng không bằng 0
+                                double pt = tong > 0 ? ((double)dahoc / tong) * 100 : 0; // Nếu tong == 0 thì pt = 0
+
+                                <td>@pt.ToString("0.##")%</td> // Định dạng phần trăm với 2 chữ số thập phân
+                            }
+
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">Không có học viên nào trong khóa học này.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<QL_LopHocTrucTuyen.Models.LoaiKhoaHoc>
+
+<label for="loaiKhoaHoc" class="form-label fw-bold">Loại khóa học</label>
+<select name="LoaiKhoaHoc" id="loaiKhoaHoc" class="form-select">
+    <option value="">Chọn loại khóa học</option>
+    @foreach (var item in Model)
+    {
+        <option value="@item.MaLoaiKhoaHoc">@item.TenLoai</option>
+    }
+</select>

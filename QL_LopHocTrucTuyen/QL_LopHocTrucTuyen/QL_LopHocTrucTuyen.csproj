@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -131,6 +132,11 @@
     <Compile Include="Controllers\QuanTriVienController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataClasses1.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataClasses1.dbml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -230,6 +236,72 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\tinymce\changelog.txt" />
+    <Content Include="Content\tinymce\js\tinymce\jquery.tinymce.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\license.txt" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\advlist\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\anchor\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\autolink\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\autoresize\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\autosave\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\bbcode\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\charmap\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\codesample\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\code\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\colorpicker\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\contextmenu\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\directionality\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\emoticons\js\emojis.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\emoticons\js\emojis.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\emoticons\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\fullpage\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\help\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\hr\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\imagetools\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\image\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\importcss\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\insertdatetime\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\legacyoutput\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\link\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\lists\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\media\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\nonbreaking\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\noneditable\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\pagebreak\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\paste\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\preview\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\print\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\quickbars\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\save\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\searchreplace\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\spellchecker\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\tabfocus\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\table\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\template\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\textcolor\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\textpattern\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\toc\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\visualblocks\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\visualchars\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\plugins\wordcount\plugin.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\skins\content\dark\content.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\content\default\content.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\content\document\content.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\content\writer\content.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide-dark\content.inline.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide-dark\content.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide-dark\content.mobile.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide-dark\skin.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide-dark\skin.mobile.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide\content.inline.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide\content.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide\content.mobile.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide\skin.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide\skin.mobile.min.css" />
+    <Content Include="Content\tinymce\js\tinymce\themes\mobile\theme.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\themes\silver\theme.min.js" />
+    <Content Include="Content\tinymce\js\tinymce\tinymce.min.js" />
     <Content Include="Content\Video\BaiGiang\dssa.mp4" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -261,6 +333,14 @@
     <Content Include="Content\File\BaiTap\file4.pdf" />
     <Content Include="Content\File\BaiTap\file5.pdf" />
     <Content Include="Content\File\DangKy_BaiTap\file1.pdf" />
+    <Content Include="Content\tinymce\js\tinymce\langs\readme.md" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide-dark\fonts\tinymce-mobile.woff" />
+    <Content Include="Content\tinymce\js\tinymce\skins\ui\oxide\fonts\tinymce-mobile.woff" />
+    <Content Include="Models\DataClasses1.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DataClasses1.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -288,13 +368,47 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LayoutGiangVien.cshtml" />
+    <Content Include="Views\GiangVien\BaiHoc.cshtml" />
+    <Content Include="Views\GiangVien\BaiTap.cshtml" />
+    <Content Include="Views\GiangVien\BaoCao.cshtml" />
+    <Content Include="Views\GiangVien\BoLoc.cshtml" />
+    <Content Include="Views\GiangVien\ChamDiem.cshtml" />
+    <Content Include="Views\GiangVien\DangNhap.cshtml" />
+    <Content Include="Views\GiangVien\HienThiKhoaHoc.cshtml" />
+    <Content Include="Views\GiangVien\HocVien.cshtml" />
+    <Content Include="Views\GiangVien\Index.cshtml" />
+    <Content Include="Views\GiangVien\KhoaHoc.cshtml" />
+    <Content Include="Views\GiangVien\LoaiKhoaHocList.cshtml" />
+    <Content Include="Views\GiangVien\SuaBaiGiang.cshtml" />
+    <Content Include="Views\GiangVien\SuaBaiTap.cshtml" />
+    <Content Include="Views\GiangVien\SuaChuong.cshtml" />
+    <Content Include="Views\GiangVien\TaoKH_1.cshtml" />
+    <Content Include="Views\GiangVien\Test.cshtml" />
+    <Content Include="Views\GiangVien\TestUploadVideo.cshtml" />
+    <Content Include="Views\GiangVien\TestViewKH.cshtml" />
+    <Content Include="Views\GiangVien\ThietLap.cshtml" />
+    <Content Include="Views\GiangVien\ThongTinNguoiDung.cshtml" />
+    <Content Include="Views\GiangVien\XemBaiGiang.cshtml" />
+    <Content Include="Views\GiangVien\XemBaiTap.cshtml" />
+    <Content Include="Views\GiangVien\XemBinhLuan.cshtml" />
+    <Content Include="Views\GiangVien\XoaBaiGiang.cshtml" />
+    <Content Include="Views\GiangVien\XoaBaiTap.cshtml" />
+    <Content Include="Views\GiangVien\XoaChuong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\DataClasses1.dbml.layout">
+      <DependentUpon>DataClasses1.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

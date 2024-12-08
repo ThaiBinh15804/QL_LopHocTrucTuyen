@@ -1,0 +1,97 @@
+﻿@model QL_LopHocTrucTuyen.Models.KhoaHoc
+
+@{
+    ViewBag.Title = "KhoaHoc";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+<div class="row" style="min-height: 700px;">
+    <div id=" sidebar" class="col-2 sidebar d-flex flex-column  align-items-center" style="box-shadow: 3px 0 5px rgba(0, 0, 0, 0.1);">
+
+    <!-- Navigation Menu -->
+    <ul class="nav text-dark nav-pills flex-column mt-3">
+        <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center px-0 py-2" href="/GiangVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=BaiHoc">
+                <i class=" me-1 fa-solid fa-book me-2"></i>
+                <span>Bài học</span>
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center px-0 py-2" href="/GiangVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=BaoCao">
+                <i class=" me-1 fa-regular fa-file-alt me-2"></i>
+                <span>Báo cáo</span>
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center px-0 py-2" href="/GiangVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=BaiTap">
+                <i class=" me-1 fa-regular fa-star me-2"></i>
+                <span>Bài tập</span>
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center px-0 py-2" href="/GiangVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=HocVien">
+                <i class=" me-1 fa-solid fa-users me-2"></i>
+                <span>Học viên</span>
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center px-0 py-2" href="/GiangVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=ThietLap">
+                <i class=" me-1 fa-solid fa-cog me-2"></i>
+                <span>Thiết lập</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+    <div id="contentArea" class="col-10" style="overflow-y: auto; transition: margin-left 0.3s;">
+        @{
+            string dieuHuong = TempData["DieuHuong"] as string;
+
+            switch (dieuHuong)
+            {
+                case "BaiHoc":
+                    @Html.Action("BaiHoc", "GiangVien", new { makh = Model.MaKhoaHoc })
+                    break;
+                case "BaoCao":
+                @Html.Action("BaoCao", "GiangVien")
+                    break;
+                case "BaiTap":
+                @Html.Action("BaiTap", "GiangVien")
+                    break;
+                case "HocVien":
+                @Html.Action("HocVien", "GiangVien")
+                    break;
+                case "ThietLap":
+                @Html.Action("ThietLap", "GiangVien")
+                    break;
+                default:
+                @Html.Action("BaiHoc", "GiangVien")
+                    break;
+            }
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content p-4" id="modalContent">
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(actionUrl) {
+        $.ajax({
+            url: actionUrl,
+            type: "GET",
+            success: function (data) {
+                $("#modalContent").html(data);
+                $("#dynamicModal").modal("show");
+            },
+            error: function () {
+                alert("Không thể tải nội dung, vui lòng thử lại.");
+            }
+        });
+    }
+</script>

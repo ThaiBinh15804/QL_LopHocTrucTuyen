@@ -1,0 +1,54 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+
+@model IEnumerable<QL_LopHocTrucTuyen.Models.KhoaHoc>
+
+@{
+    ViewBag.Title = "TestViewKH";
+    Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="mb-3">
+        <a class="btn btn-dark" href="#" data-bs-toggle="modal" data-bs-target="#createKhoaHocModal">
+            Tạo khoá học mới
+        </a>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    @if (item.AnhBia != null)
+                    {
+                        <img src="~/Content/HinhAnh/KhoaHoc/@Html.DisplayFor(modelItem => item.AnhBia)" class="card-img-top" alt="Ảnh bìa" style="height: 200px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img src="~/Content/HinhAnh/Base/education-high-resolution-logo.png" class="card-img-top" alt="Ảnh bìa mặc định" style="height: 200px; object-fit: cover;">
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title" style="font-size: 1.25rem;">@Html.DisplayFor(modelItem => item.TenKhoaHoc)</h5>
+                        <p class="mt-2">
+                            Trạng thái: <span class="badge bg-success">Đã duyệt</span>
+                        </p>
+                        <div class="mt-auto">
+                            <a href="/GiangVien/KhoaHoc/?makh=@Html.DisplayFor(modelItem => item.MaKhoaHoc)" class="btn btn-primary">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="createKhoaHocModal" tabindex="-1" role="dialog" aria-labelledby="createKhoaHocModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div id="createKhoaHocContent">
+                @* Gọi Action để render nội dung PartialView *@
+                @Html.Action("TaoKH_1", "GiangVien")
+            </div>
+        </div>
+    </div>
+</div>

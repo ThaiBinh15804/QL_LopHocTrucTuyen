@@ -1,0 +1,73 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+
+@model QL_LopHocTrucTuyen.Models.KhoaHoc
+
+<div class="container my-4">
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Số lượng đăng ký</h5>
+                    <h2 class="card-text">@Model.DangKies.Count()</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tiến độ hoàn thành trung bình</h5>
+                    @{
+                        double tong = 0;
+                        int sobg = Model.Chuongs.Sum(t => t.BaiGiangs.Count());
+                        if (sobg !=0)
+                        {
+                            foreach (DangKy dk in Model.DangKies.Where(t => t.MaKhoaHoc == Model.MaKhoaHoc))
+                            {
+                                tong += (((double)dk.ThamGias.Where(t => t.BaiGiang.Chuong.MaKhoaHoc == Model.MaKhoaHoc).Count() / sobg) * 100);
+                            }
+
+                            
+                        }
+                        double tb = Model.DangKies.Count() > 0 ? tong / Model.DangKies.Count() : 0; // Tránh chia cho 0
+
+                    <div class="progress" style="height: 30px; border-radius: 5px; position: relative;">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             style="width: @tb.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%; "
+                             aria-valuenow="@tb.ToString("0.##")"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            <span class="progress-label" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; text-shadow: 1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black;">
+                                @tb.ToString("0.##")%
+                            </span>
+
+                        </div>
+                    </div>
+                    }
+                    @* Hiển thị thông báo nếu tiến độ là 0 *@
+                    @if (tb == 0)
+                    {
+                        <div class="mt-2 text-center text-muted">Chưa có dữ liệu hoàn thành.</div>
+                    }
+                    @* Kết thúc thông báo *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Điểm số trung bình</h5>
+                    @{
+                        var s = Model.DangKies.Sum(t => t.DangKy_BaiTaps.Where(d => d.Diem != null).Sum(q => q.Diem));
+                        var kq = Model.DangKies.Where(t => t.DangKy_BaiTaps.Where(a => a.Diem != null).Any()).Count() > 0 ? s / Model.DangKies.Where(t => t.DangKy_BaiTaps.Where(a => a.Diem != null).Any()).Count() : 0; // Tránh chia cho 0
+                    }
+                    <h2 class="card-text">@kq</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
