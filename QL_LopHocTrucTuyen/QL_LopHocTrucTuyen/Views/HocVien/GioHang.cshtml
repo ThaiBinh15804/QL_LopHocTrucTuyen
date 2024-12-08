@@ -1,0 +1,148 @@
+﻿@using System.Globalization;
+@model List<QL_LopHocTrucTuyen.Models.KhoaHoc>
+@{
+    ViewBag.Title = "Giỏ Hàng";
+    Layout = "~/Views/Shared/_LayoutHocVien.cshtml";
+    var selectedCourseId = ViewBag.SelectedCourseId as int?;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Giỏ Hàng</h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"> Chọn mua</th>
+                        <th>Khóa học</th>
+                        <th>Đơn Giá</th>
+                        <th>Số Tiền</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selectedCourses" class="select-item" data-id="@item.MaKhoaHoc" data-price="@item.Gia"
+                                       @(selectedCourseId.HasValue && selectedCourseId == item.MaKhoaHoc ? "checked" : "")>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="~/Content/HocVien/Images/@item.AnhBia" alt="@item.TenKhoaHoc" style="width: 50px; height: 50px; margin-right: 10px;" />
+                                    <span>@item.TenKhoaHoc</span>
+                                </div>
+                            </td>
+                            <td>@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", item.Gia)</td>
+                            <td class="item-total">@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", item.Gia)</td>
+                            <td>
+                                <button type="button" class="btn btn-danger delete-btn" data-id="@item.MaKhoaHoc">Xóa</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tổng Giỏ Hàng -->
+        <div class="mt-4 p-3 border rounded mb-3" style="max-width: 350px; margin-left: auto;">
+            <h4 class="mb-3">Cộng giỏ hàng</h4>
+            <div class="d-flex justify-content-between">
+                <span>Tạm tính</span>
+                <span id="subtotal">0 đ</span>
+            </div>
+            <div class="d-flex justify-content-between fw-bold">
+                <span>Tổng</span>
+                <span id="total">0 đ</span>
+            </div>
+            <button class="btn btn-primary w-100 mt-3" onclick="submitSelectedItems()">Thanh toán</button>
+        </div>
+    }
+    else
+    {
+        <p>Giỏ hàng trống.</p>
+    }
+</div>
+
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Tính toán tổng tiền
+            function calculateTotal() {
+                let subtotal = 0;
+                $(".select-item:checked").each(function () {
+                    const price = parseFloat($(this).data("price"));
+                    subtotal += price;
+                });
+
+                $("#subtotal").text(subtotal.toLocaleString() + " đ"); // Hiển thị tạm tính
+                $("#total").text(subtotal.toLocaleString() + " đ"); // Hiển thị tổng
+            }
+
+            // Tính toán tổng khi chọn sản phẩm
+            $(".select-item").change(function () {
+                calculateTotal();
+            });
+
+            // Chọn tất cả sản phẩm
+            $("#selectAll").click(function () {
+                const isChecked = $(this).prop('checked');
+                $(".select-item").prop('checked', isChecked).trigger('change'); // Tính toán lại khi chọn tất cả
+            });
+
+            // Xử lý nút xóa
+            $(".delete-btn").click(function () {
+                const courseId = $(this).data("id");
+                if (confirm("Bạn có chắc chắn muốn xóa khóa học này khỏi giỏ hàng?")) {
+                    $.post("/HocVien/XoaKhoiGioHang", { id: courseId })
+                        .done(function (response) {
+                            if (response.success) {
+                                location.reload(); // Tải lại trang để cập nhật giỏ hàng
+                            } else {
+                                alert("Đã xảy ra lỗi khi xóa khóa học.");
+                            }
+                        })
+                        .fail(function () {
+                            alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+                        });
+                }
+            });
+
+            // Khởi tạo tổng tiền khi tải trang
+            calculateTotal();
+        });
+
+        // Chuyển đến trang thanh toán với các khóa học đã chọn
+        function submitSelectedItems() {
+            const selectedItems = [];
+            $(".select-item:checked").each(function () {
+                selectedItems.push($(this).data("id"));
+            });
+
+            if (selectedItems.length === 0) {
+                alert("Vui lòng chọn ít nhất một khóa học để thanh toán.");
+                return;
+            }
+
+            // Gửi danh sách ID khóa học đã chọn sang server và chuyển hướng đến ChiTietThanhToan
+            $.ajax({
+                url: '@Url.Action("ChonKhoaHocThanhToan", "HocVien")',
+                type: 'POST',
+                data: { selectedCourses: selectedItems },
+                traditional: true,
+                success: function () {
+                    window.location.href = '@Url.Action("ChiTietThanhToan", "HocVien")';
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi khi chuyển đến trang thanh toán.");
+                }
+            });
+        }
+    </script>
+}
