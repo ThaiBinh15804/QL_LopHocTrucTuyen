@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_LayoutGiangVien.cshtml";
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger my-3" role="alert">
+        @TempData["Error"]
+    </div>
+}
+
+
 <div class="container my-4">
     <form action="/GiangVien/SuaThongTinNguoiDung" method="post" enctype="multipart/form-data">
         <div class="row">
@@ -19,6 +27,12 @@
                         </h4>
                         <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('imageUpload').click();">Thay đổi ảnh</button>
                         <input type="file" id="imageUpload" name="anh" onchange="previewNewImage(event)" class="d-none" accept="image/*" />
+                        <button type="button" id="changePasswordButton"
+                                class="btn btn-link mt-2"
+                                style="text-decoration: underline; color: blue;">
+                            Đổi mật khẩu
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -33,7 +47,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label><strong>Chuyên ngành:</strong></label>
-                                <input type="text" name="chuyennganh" class="form-control" value="@Model.ChuyenNganh" id="chuyenNganhInput" />
+                                <input type="text" name="chuyennganh" class="form-control" value="@Model.ChuyenNganh" id="chuyenNganhInput" readonly />
                             </div>
                             <div class="col-md-6">
                                 <label><strong>Số điện thoại:</strong></label>
@@ -43,11 +57,11 @@
                             </div>
                             <div class="col-md-6 mt-3">
                                 <label><strong>Địa chỉ:</strong></label>
-                                <input type="text" name="diachi" class="form-control" value="@Model.DiaChi" id="diaChiInput" />
+                                <input type="text" name="diachi" class="form-control" value="@Model.DiaChi" id="diaChiInput" readonly />
                             </div>
                             <div class="col-md-6 mt-3">
                                 <label><strong>Ngày gia nhập:</strong></label>
-                                <input type="text" name="ngaygianhap" class="form-control" value="@Model.NguoiDung.NgayTao.ToShortDateString()" />
+                                <input type="text" name="ngaygianhap" class="form-control" value="@Model.NguoiDung.NgayTao.ToShortDateString()" readonly />
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3" id="updateButton">Lưu thay đổi</button>
@@ -58,7 +72,103 @@
     </form>
 </div>
 
+<!-- Modal để Thay Đổi Mật Khẩu -->
+<div id="changePasswordModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đổi Mật Khẩu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <input type="hidden" id="username" class="form-control" value="@Model.MaGiangVien" />
+                    <div class="form-group">
+                        <label for="currentPassword">Mật khẩu hiện tại</label>
+                        <input type="password" id="currentPassword" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Mật khẩu mới</label>
+                        <input type="password" id="newPassword" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPassword">Xác nhận mật khẩu mới</label>
+                        <input type="password" id="confirmNewPassword" class="form-control" required />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="savePasswordButton">Đổi mật khẩu</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    $(document).ready(function () {
+        // Hiển thị modal đổi mật khẩu
+        $('#changePasswordButton').on('click', function () {
+            $('#changePasswordModal').modal('show');
+        });
+
+        // Xử lý đóng modal khi nhấn nút Đóng hoặc nút X
+        $('#changePasswordModal').on('hidden.bs.modal', function () {
+            // Reset form bên trong modal nếu cần
+            $('#changePasswordForm')[0].reset();
+        });
+
+        // Đảm bảo nút đóng thực thi hành động
+        $('[data-dismiss="modal"]').on('click', function () {
+            $('#changePasswordModal').modal('hide');
+        });
+
+        // Xử lý logic đổi mật khẩu
+        $('#savePasswordButton').on('click', function () {
+            const username = $('#username').val();
+            const currentPassword = $('#currentPassword').val();
+            const newPassword = $('#newPassword').val();
+            const confirmNewPassword = $('#confirmNewPassword').val();
+
+            if (newPassword !== confirmNewPassword) {
+                alert("Mật khẩu mới và xác nhận mật khẩu không khớp.");
+                return;
+            }
+
+            $.ajax({
+                url: '/GiangVien/DoiMatKhau',
+                type: 'POST',
+                data: {
+                    username: username,
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                },
+                success: function (response) {
+                    alert(response.message);
+                    if (response.success) {
+                        $('#changePasswordModal').modal('hide');
+                        $('#changePasswordForm')[0].reset();
+                    }
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                }
+            });
+        });
+
+        // Xem trước ảnh
+        $('#imageUpload').on('change', function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $('#previewImage').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
     function previewNewImage(event) {
         const imagePreview = document.getElementById('previewImage');
         const file = event.target.files[0];
@@ -77,3 +187,4 @@
         }
     }
 </script>
+

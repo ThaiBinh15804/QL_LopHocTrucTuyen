@@ -30,8 +30,13 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title" style="font-size: 1.25rem;">@Html.DisplayFor(modelItem => item.TenKhoaHoc)</h5>
                         <p class="mt-2">
-                            Trạng thái: <span class="badge bg-success">Đã duyệt</span>
+                            Trạng thái:
+                            <span class="badge
+                                  @(item.TrangThai == "Đã duyệt" ? "bg-success" : item.TrangThai == "Chưa duyệt" ? "bg-warning" : "bg-secondary") ">
+                                @item.TrangThai
+                            </span>
                         </p>
+
                         <div class="mt-auto">
                             <a href="/GiangVien/KhoaHoc/?makh=@Html.DisplayFor(modelItem => item.MaKhoaHoc)" class="btn btn-primary">Chi tiết</a>
                         </div>

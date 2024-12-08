@@ -38,10 +38,12 @@
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.TenKhoaHoc)</h5>
                         <p class="mt-2">
                             Trạng thái:
-                            <span class="badge bg-success ">
+                            <span class="badge
+                                  @(item.TrangThai == "Đã duyệt" ? "bg-success" : item.TrangThai == "Chưa duyệt" ? "bg-warning" : "bg-secondary") ">
                                 @item.TrangThai
                             </span>
                         </p>
+
                         <a href="/GiangVien/KhoaHoc/?makh=@Html.DisplayFor(modelItem => item.MaKhoaHoc)" class="btn btn-primary">Chi tiết</a>
                     </div>
                 </div>

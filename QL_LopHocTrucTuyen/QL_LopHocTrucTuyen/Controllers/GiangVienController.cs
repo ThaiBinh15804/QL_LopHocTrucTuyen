@@ -88,6 +88,20 @@ namespace QL_LopHocTrucTuyen.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult DangXuat()
+        {
+            // Xóa session của người dùng
+            Session["User"] = null;
+
+            // Hủy cookie xác thực của FormsAuthentication (nếu sử dụng FormsAuthentication)
+            FormsAuthentication.SignOut();
+
+            // Chuyển hướng về trang đăng nhập
+            return RedirectToAction("DangNhap");
+        }
+
+
+        [AllowAnonymous]
         public ActionResult XuLyDangNhap(FormCollection c)
         {
             string tenDN = c["username"];
@@ -99,15 +113,16 @@ namespace QL_LopHocTrucTuyen.Controllers
             {
                 GiangVien gv = data.GiangViens.FirstOrDefault(t => t.MaGiangVien == user.MaNguoiDung);
                 Session["user"] = gv;
-                TempData["ThongBao"] = "Đăng nhập thành công";
+                TempData["ThongTin"] = "Đăng nhập thành công";
                 FormsAuthentication.SetAuthCookie(user.TenDangNhap, false);
+                return RedirectToAction("Index");
             }
             else
             {
-                TempData["ThongBao"] = "Đăng nhập thất bại";
+                TempData["Error"] = "Đăng nhập thất bại";
+                return RedirectToAction("DangNhap");
             }
 
-            return RedirectToAction("Index");
         }
 
         public ActionResult TaoKH_1()
@@ -386,6 +401,8 @@ namespace QL_LopHocTrucTuyen.Controllers
             cu.TenKhoaHoc = c["TenKhoaHoc"];
             cu.MoTa = c["MoTa"];
             cu.MaLoaiKhoaHoc = c["LoaiKhoaHoc"];
+            cu.NgayBatDau = DateTime.Parse(c["NgayBatDau"]);
+            cu.NgayKetThuc = DateTime.Parse(c["NgayKetThuc"]);
 
             data.SubmitChanges();
 
@@ -400,6 +417,11 @@ namespace QL_LopHocTrucTuyen.Controllers
         public ActionResult XuLyChamDiem(DangKy_BaiTap dk)
         {
             DangKy_BaiTap cu = data.DangKy_BaiTaps.FirstOrDefault(t => t.MaDangKy == dk.MaDangKy && t.MaBaiTap == dk.MaBaiTap);
+
+            if (dk.Diem < 0 || dk.Diem > 10)
+            {
+                return RedirectToAction("ChamDiem", new { mabt = dk.MaBaiTap, madk = dk.MaDangKy });
+            }
 
             if (cu.Diem != dk.Diem)
             {
@@ -515,22 +537,27 @@ namespace QL_LopHocTrucTuyen.Controllers
         {
             List<KhoaHoc> lst = data.KhoaHocs.ToList();
 
-            if (!String.IsNullOrEmpty(c["LoaiKhoaHoc"]))
+            // Lọc theo Loại Khóa Học (giữ nguyên vì không có vấn đề về chữ hoa/thường)
+            if (!string.IsNullOrEmpty(c["LoaiKhoaHoc"]))
             {
-                lst = lst.Where(t => t.MaLoaiKhoaHoc.ToString() == c["LoaiKhoaHoc"]).ToList();
+                lst = lst.Where(t => t.MaLoaiKhoaHoc.ToString().Equals(c["LoaiKhoaHoc"], StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            if (c["TrangThai"] != null)
+            // Lọc theo Trạng Thái (so sánh không phân biệt chữ hoa/thường)
+            if (!string.IsNullOrEmpty(c["TrangThai"]))
             {
-                lst = lst.Where(t => t.TrangThai == c["TrangThai"]).ToList();
+                string s = c["TrangThai"];
+                lst = lst.Where(t => string.Equals(t.TrangThai, c["TrangThai"], StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            if (c["TenKhoaHoc"] != null)
+            // Lọc theo Tên Khóa Học (so sánh không phân biệt chữ hoa/thường và cho phép tìm kiếm tương tự)
+            if (!string.IsNullOrEmpty(c["TenKhoaHoc"]))
             {
                 string tenkh = c["TenKhoaHoc"].ToLower();
-                lst = lst.Where(t => t.TenKhoaHoc.ToLower().Contains(tenkh)).ToList();
+                lst = lst.Where(t => !string.IsNullOrEmpty(t.TenKhoaHoc) && t.TenKhoaHoc.ToLower().Contains(tenkh)).ToList();
             }
 
+            // Lọc theo Ngày Bắt Đầu
             if (!string.IsNullOrEmpty(c["NgayBD"]))
             {
                 DateTime ngaybd;
@@ -544,6 +571,7 @@ namespace QL_LopHocTrucTuyen.Controllers
                 }
             }
 
+            // Lọc theo Ngày Kết Thúc
             if (!string.IsNullOrEmpty(c["NgayKT"]))
             {
                 DateTime ngaykt;
@@ -557,9 +585,9 @@ namespace QL_LopHocTrucTuyen.Controllers
                 }
             }
 
-
+            // Lưu danh sách lọc tạm thời và chuyển hướng
             TempData["lst"] = lst;
-            return RedirectToAction("BoLoc", lst);
+            return RedirectToAction("BoLoc", new { filteredData = lst });
         }
 
         public ActionResult ThongTinNguoiDung()
@@ -574,10 +602,15 @@ namespace QL_LopHocTrucTuyen.Controllers
             GiangVien gv = (GiangVien)Session["user"];
             GiangVien cu = data.GiangViens.FirstOrDefault(t => t.MaGiangVien == gv.MaGiangVien);
 
-            cu.HoTen = c["hoten"];
-            cu.ChuyenNganh = c["chuyennganh"];
+            string soDienThoai = c["sdt"];
+
+            if (string.IsNullOrEmpty(soDienThoai) || soDienThoai.Length != 10 || !soDienThoai.All(char.IsDigit) || soDienThoai[0] != '0')
+            {
+                TempData["Error"] = "Số điện thoại không hợp lệ. Số điện thoại phải là 10 chữ số và bắt đầu bằng số 0.";
+                
+            }
+
             cu.SoDienThoai = c["sdt"];
-            cu.DiaChi = c["diachi"];
             cu.NgayGiaNhap = DateTime.Parse(c["ngaygianhap"]);
 
             if (anh != null)
@@ -592,7 +625,33 @@ namespace QL_LopHocTrucTuyen.Controllers
 
             data.SubmitChanges();
 
+            TempData["Info"] = "Cập nhật thông tin thành công";
+
             return RedirectToAction("ThongTinNguoiDung");
         }
+
+        [HttpPost]
+        public JsonResult DoiMatKhau(string username, string currentPassword, string newPassword)
+        {
+            try
+            {
+                var user = data.NguoiDungs.FirstOrDefault(u => u.MaNguoiDung == username && u.MatKhau == currentPassword);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "Mật khẩu hiện tại không đúng hoặc tài khoản không tồn tại." });
+                }
+
+                user.MatKhau = newPassword;
+                data.SubmitChanges();
+
+                return Json(new { success = true, message = "Đổi mật khẩu thành công." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Đã xảy ra lỗi: " + ex.Message });
+            }
+
+        }
+
     }
 }
