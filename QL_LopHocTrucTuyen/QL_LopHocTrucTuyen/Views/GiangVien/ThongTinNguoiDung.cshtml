@@ -12,6 +12,12 @@
     </div>
 }
 
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-success my-3" role="alert">
+        @TempData["Info"]
+    </div>
+}
 
 <div class="container my-4">
     <form action="/GiangVien/SuaThongTinNguoiDung" method="post" enctype="multipart/form-data">

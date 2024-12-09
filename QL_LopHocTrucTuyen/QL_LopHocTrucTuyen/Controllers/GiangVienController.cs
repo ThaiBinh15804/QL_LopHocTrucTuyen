@@ -514,8 +514,9 @@ namespace QL_LopHocTrucTuyen.Controllers
 
         public ActionResult TimKiem(FormCollection c)
         {
+            GiangVien gv = (GiangVien)Session["user"];
             string tk = c["TenKhoaHoc"].ToLower();
-            List<KhoaHoc> lst = data.KhoaHocs.Where(t => t.TenKhoaHoc.ToLower().Contains(tk)).ToList();
+            List<KhoaHoc> lst = data.KhoaHocs.Where(t => t.TenKhoaHoc.ToLower().Contains(tk) && t.MaGiangVien == gv.MaGiangVien).ToList();
 
             TempData["lst"] = lst;
 
@@ -535,7 +536,8 @@ namespace QL_LopHocTrucTuyen.Controllers
 
         public ActionResult XuLyBoLoc(FormCollection c)
         {
-            List<KhoaHoc> lst = data.KhoaHocs.ToList();
+            GiangVien gv = (GiangVien)Session["user"];
+            List<KhoaHoc> lst = data.KhoaHocs.Where(t => t.MaGiangVien == gv.MaGiangVien).ToList();
 
             // Lọc theo Loại Khóa Học (giữ nguyên vì không có vấn đề về chữ hoa/thường)
             if (!string.IsNullOrEmpty(c["LoaiKhoaHoc"]))
