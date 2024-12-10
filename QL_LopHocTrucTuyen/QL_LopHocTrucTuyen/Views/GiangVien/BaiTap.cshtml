@@ -77,7 +77,7 @@
                                                 <tbody>
                                                     @{
                     var baiTapChuaCham = Model.DangKies
-                        .SelectMany(dk => dk.DangKy_BaiTaps.Where(b => b.Diem == null && b.BaiTap.MaChuong == chuong.MaChuong))
+                        .SelectMany(dk => dk.DangKy_BaiTaps.Where(b => b.Diem == null && b.BaiTap.MaChuong == chuong.MaChuong && b.NgayNop != null))
                         .ToList();
 
                     if (baiTapChuaCham.Any())

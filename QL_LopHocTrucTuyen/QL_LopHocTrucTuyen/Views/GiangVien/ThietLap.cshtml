@@ -3,9 +3,12 @@
 @model QL_LopHocTrucTuyen.Models.KhoaHoc
 
 <div class="container my-5">
-    <div class="d-flex justify-content-end mb-4 align-items-end">
-        <a class="btn btn-danger" href="/GiangVien/XoaKhoaHoc/?makh=@Model.MaKhoaHoc">Xoá khoá học</a>
-    </div>
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info my-3" role="alert">
+            @TempData["Info"]
+        </div>
+    }
 
     <div class="edit-course">
         <form action="/GiangVien/SuaKhoaHoc/?makh=@Model.MaKhoaHoc" method="post" enctype="multipart/form-data">
@@ -49,6 +52,27 @@
                 <label for="ngayKetThuc" class="py-2 fw-bold">Ngày kết thúc</label>
                 <input type="datetime" class="form-control" id="ngayKetThuc" name="NgayKetThuc" value="@Model.NgayKetThuc">
             </div>
+
+
+            <div class="form-group mb-4">
+                <label for="trangThai" class="py-2 fw-bold">Trạng thái khóa học</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text" class="form-control w-75" id="trangThai" name="TrangThai" value="@Model.TrangThai" readonly>
+
+                    <!-- Conditional Buttons -->
+                    <div class="ms-3">
+                        @if (Model.TrangThai != "Ngừng hoạt động")
+                        {
+                            <a href="/GiangVien/NgungKhoaHoc/?makh=@Model.MaKhoaHoc" class="btn btn-danger">Ngừng khóa học</a>
+                        }
+                        else
+                        {
+                            <a href="/GiangVien/YeuCauPheDuyet/?makh=@Model.MaKhoaHoc" class="btn btn-primary">Yêu cầu phê duyệt</a>
+                        }
+                    </div>
+                </div>
+            </div>
+
 
             <div class="form-group mb-4">
                 <label class="py-2 fw-bold">Ảnh hiện tại</label>

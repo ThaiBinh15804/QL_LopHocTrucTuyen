@@ -655,5 +655,27 @@ namespace QL_LopHocTrucTuyen.Controllers
 
         }
 
+
+
+        public ActionResult NgungKhoaHoc(string makh)
+        {
+            TempData["DieuHuong"] = "ThietLap";
+            var k = data.KhoaHocs.FirstOrDefault(t => t.MaKhoaHoc == makh);
+            k.TrangThai = "Ngừng hoạt động";
+            data.SubmitChanges();
+            TempData["Info"] = "Khoá học đã ngừng hoạt động";
+            return RedirectToAction("KhoaHoc", new { makh = makh });
+        }
+
+
+        public ActionResult YeuCauPheDuyet(string makh)
+        {
+            TempData["DieuHuong"] = "ThietLap";
+            var k = data.KhoaHocs.FirstOrDefault(t => t.MaKhoaHoc == makh);
+            k.TrangThai = "Chưa duyệt";
+            data.SubmitChanges();
+            TempData["Info"] = "Khoá học đã được yêu cầu phê duyệt";
+            return RedirectToAction("KhoaHoc", new { makh = makh });
+        }
     }
 }
