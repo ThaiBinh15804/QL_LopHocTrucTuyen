@@ -131,6 +131,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\GiangVienController.cs" />
     <Compile Include="Controllers\HocVienController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuanTriVienController.cs" />
     <Compile Include="Filter\YeuCauDangNhap.cs" />
     <Compile Include="Global.asax.cs">
@@ -458,6 +459,7 @@
     <Content Include="Views\HocVien\BaiGiang.cshtml" />
     <Content Include="Views\HocVien\XemBinhLuan.cshtml" />
     <Content Include="Views\HocVien\ChiTietBaiTap.cshtml" />
+    <Content Include="Views\Home\DieuHuong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

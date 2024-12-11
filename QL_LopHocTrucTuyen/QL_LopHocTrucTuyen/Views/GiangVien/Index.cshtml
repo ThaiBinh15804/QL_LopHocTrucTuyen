@@ -31,7 +31,7 @@
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4">
                 <div class="card shadow-sm">
                     <img src="@(item.AnhBia != null ? Url.Content("~/Content/HinhAnh/KhoaHoc/" + item.AnhBia) : Url.Content("~/Content/GiangVien/HinhAnh/Base/education-high-resolution-logo.png"))" class="card-img-top" alt="Ảnh bìa" style="height: 200px; object-fit: cover;">
                     <div class="card-body">

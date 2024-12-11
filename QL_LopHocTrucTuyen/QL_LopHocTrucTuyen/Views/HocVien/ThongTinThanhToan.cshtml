@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QL_LopHocTrucTuyen.Models.ThanhToan>
+﻿﻿@model IEnumerable<QL_LopHocTrucTuyen.Models.ThanhToan>
 
 @{
     ViewBag.Title = "ThongTinThanhToan";
@@ -15,19 +15,33 @@
             <table class="table table-bordered text-center">
                 <thead class="table-success">
                     <tr>
-                        <th><i class="fas fa-book me-2"></i>Khóa Học</th>
+                        <th><i class="fas fa-dollar me-2"></i>Mã thanh toán</th>
+                        <th><i class="fas fa-book me-2"></i>Tên khoá học</th>
                         <th><i class="fas fa-dollar-sign me-2"></i>Số Tiền</th>
+                        <th><i class="fas fa-dollar-sign me-2"></i>Thực trả</th>
                         <th><i class="fas fa-calendar-alt me-2"></i>Ngày Thanh toán</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@item.MaThanhToan</td>
-                            <td>@string.Format("{0:#,0} VNĐ", item.SoTien)</td>
-                            <td>@(item.NgayThanhToan.HasValue ? item.NgayThanhToan.Value.ToString("dd/MM/yyyy") : "Chưa có thông tin")</td>
-                        </tr>
+                        foreach (var i in item.ChiTietThanhToans)
+                        {
+                            <tr>
+                                <td>@item.MaThanhToan</td>
+                                <td>@i.DangKies.FirstOrDefault().KhoaHoc.TenKhoaHoc</td>
+                                <td>@string.Format("{0:#,0} VNĐ", i.SoTien)</td>
+                                @{
+                            decimal giam = 0;
+                            if (i.GiamGia != null)
+                            {
+                                giam = decimal.Parse(i.SoTien.ToString()) * decimal.Parse(i.GiamGia.PhanTramGiam.ToString()) / 100;
+                            }
+                                }
+                                <td>@string.Format("{0:#,0} VNĐ", (i.SoTien - giam))</td>
+                                <td>@(item.NgayThanhToan.HasValue ? item.NgayThanhToan.Value.ToString("dd/MM/yyyy") : "Chưa có thông tin")</td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
@@ -40,4 +54,3 @@
         </div>
     }
 </div>
-

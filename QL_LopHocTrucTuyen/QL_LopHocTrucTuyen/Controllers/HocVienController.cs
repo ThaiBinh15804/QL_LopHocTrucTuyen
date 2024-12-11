@@ -70,7 +70,7 @@ namespace QL_LopHocTrucTuyen.Controllers
         {
             // Lấy khóa học theo ID
             var khoaHoc = db.KhoaHocs.FirstOrDefault(kh => kh.MaKhoaHoc == id);
-
+            
             if (khoaHoc == null)
             {
                 return RedirectToAction("TrangChu", "HocVien");
@@ -90,7 +90,7 @@ namespace QL_LopHocTrucTuyen.Controllers
 
             // Lấy thông tin khóa học
             var khoaHoc = db.KhoaHocs.FirstOrDefault(kh => kh.Chuongs.Any(c => c.BaiGiangs.Any(bg => bg.MaBaiGiang == id)));
-            TempData["BGHT"] = db.ThamGias.Where(t=>t.BaiGiang.Chuong.MaKhoaHoc==khoaHoc.MaKhoaHoc).OrderByDescending(t => t.BaiGiang.Chuong.ThuTu).ThenByDescending(t => t.BaiGiang.ThuTu).FirstOrDefault();
+            
             ViewBag.KhoaHoc = khoaHoc;
 
             return View(baiGiang);
@@ -1010,7 +1010,7 @@ namespace QL_LopHocTrucTuyen.Controllers
         public ActionResult DangXuat()
         {
             Session.Clear();
-            return RedirectToAction("DangNhap");
+            return RedirectToAction("DieuHuong", "Home");
         }
 
         public string TaoMaNguoiDung()

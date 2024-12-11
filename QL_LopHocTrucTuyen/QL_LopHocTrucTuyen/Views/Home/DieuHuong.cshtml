@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Điều Hướng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="text-align: center; margin-top: 50px;">
+    <h2 style="font-size: 2em; color: #333;">Bạn là ai?</h2>
+
+    <div style="margin: 20px 0;">
+        <a href="/Home/XuLyDieuHuong/?ng=HocVien"
+           style="display: inline-block; margin: 10px; padding: 15px 30px;
+                  font-size: 1.2em; color: white; background-color: #007bff;
+                  border-radius: 5px; text-decoration: none;">
+            Học viên
+        </a>
+        <a href="/Home/XuLyDieuHuong/?ng=GiangVien"
+           style="display: inline-block; margin: 10px; padding: 15px 30px;
+                  font-size: 1.2em; color: white; background-color: #28a745;
+                  border-radius: 5px; text-decoration: none;">
+            Giảng viên
+        </a>
+        <a href="/Home/XuLyDieuHuong/?ng=QTV"
+           style="display: inline-block; margin: 10px; padding: 15px 30px;
+                  font-size: 1.2em; color: white; background-color: #dc3545;
+                  border-radius: 5px; text-decoration: none;">
+            Quản trị viên
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <p style="color: red; font-size: 1.1em; margin-top: 20px;">
+            Lỗi: <span>@TempData["Error"]</span>
+        </p>
+    }
+</div>

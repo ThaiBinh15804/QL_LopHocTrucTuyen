@@ -17,6 +17,8 @@ namespace QL_LopHocTrucTuyen.Controllers
         public ActionResult Index()
         {
             GiangVien gv = (GiangVien)Session["user"];
+            if (gv == null)
+                return RedirectToAction("DangNhap");
             return View(data.KhoaHocs.Where(t => t.MaGiangVien == gv.MaGiangVien).Take(5).ToList());
         }
 
@@ -97,7 +99,7 @@ namespace QL_LopHocTrucTuyen.Controllers
             FormsAuthentication.SignOut();
 
             // Chuyển hướng về trang đăng nhập
-            return RedirectToAction("DangNhap");
+            return RedirectToAction("DieuHuong", "Home");
         }
 
 
