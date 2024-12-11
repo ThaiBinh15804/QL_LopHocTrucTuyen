@@ -1,0 +1,50 @@
+﻿@model QL_LopHocTrucTuyen.Models.LoaiKhoaHoc
+@using QL_LopHocTrucTuyen.Models;
+@{
+    ViewBag.Title = "ChiTietLoaiKhoaHoc";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div >
+    <div style="padding:8px 20px;">
+        <div class="d-flex gap-2 mt-2">
+            <i style="color: #343a40" class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #343a40">Danh sách thể loại khóa học</span>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #000; ">Tạo thể loại khóa học</span>
+        </div>
+        <h1 style="font-size: 22px; font-weight: 600; color: #000; margin-top: 20px;">Tạo thể loại khóa học</h1>
+        <div style="background-color: #fff; border-radius: 5px; width: 100%; margin-top: 20px; padding: 8px 16px 25px; border: 1px solid #dadada; width: 100%;">
+            <form class="myForm4" action="/QuanTriVien/ThemLoaiKhoaHoc" method="post">
+                <div style="width: 100%;">
+                    <span style="padding: 8px 0 16px; display: block">Thông tin thể loại khóa học:</span>
+                    <div style="margin-left: 10px" class="d-flex justify-content-between gap-4">
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="TenLoai">Tên loại: </label>
+                            @Html.TextBoxFor(model => model.TenLoai, new { @id = "TenLoai", @class = "form-control mt-2", placeholder = "Nhập tên loại" })
+                            <span style="min-height: 20px; display: inline-block; color: red; font-size: 14px; margin-top: 5px;" class="errTenLoai"></span>
+                        </div>
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="MoTa">Mô tả: </label>
+                            @Html.TextBoxFor(model => model.MoTa, new { @id = "MoTa", @class = "form-control mt-2", placeholder = "Nhập mô tả" })
+                            <span style="min-height: 20px; display: inline-block; color: red; font-size: 14px; margin-top: 5px;" class="errMoTa"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 mt-1">
+                    <button id="btnClearForm" class="btn btn-danger">Xóa</button>
+                    <button type="submit" class="btn btn-primary">Tạo</button>
+                </div>
+            </form>
+        </div>
+        <div class="mt-2">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+        </div>
+    </div>
+</div>

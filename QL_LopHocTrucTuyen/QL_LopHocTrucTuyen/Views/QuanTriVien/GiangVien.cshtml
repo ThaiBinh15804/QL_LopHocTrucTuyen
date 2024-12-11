@@ -1,0 +1,122 @@
+﻿@model QL_LopHocTrucTuyen.Models.QuanTriVienModel.GiangVienPagedList
+@using QL_LopHocTrucTuyen.Models;
+@{
+    ViewBag.Title = "GiangVien";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div>
+    <div style="padding:8px 20px;">
+        <div class="d-flex gap-2 mt-2">
+            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-angle-right"></i>
+            <span>Danh sách giảng viên</span>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-2">
+            <h1 style="font-size: 22px; font-weight: 600; color: #000;">Danh sách Giảng viên</h1>
+            <a href="/QuanTriVien/ThemGiangVien" class="btn btn-primary" style="margin-bottom: 10px; display: inline-block;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="height: 15px; width: 15px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Thêm giảng viên
+            </a>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-2">
+            <form method="get" action="/QuanTriVien/TimKiemGiangVien" class="input-group" style="width: 75%; position: relative;">
+                <input type="search" name="search" style="outline: none; width: 80%; padding: 8px; padding-left: 12px; border: 2px solid #0d6efd; border-top-left-radius: 5px; border-bottom-left-radius: 5px" placeholder="Tìm kiếm theo mã giảng viên...">
+                <button type="submit" class="btn btn-outline-secondary" style="padding: 8px 12px; background-color: #0d6efd; border-radius: 5px; border: 2px solid #0d6efd; border-top-left-radius: 0px; border-bottom-left-radius: 0px;" type="button">
+                    <i style="color: white;" class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+
+        <div style="background-color: #fff; border-radius: 5px; width: 100%; margin-top: 20px; padding: 16px; border: 1px solid #dadada; border-radius: 5px;">
+            <div style="display:flex; border-bottom: 1px solid #dadada">
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Mã giảng viên</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Họ tên</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Tên đăng nhập</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Chuyên ngành</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Trạng thái</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Thao tác</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; align-items: center;">
+                @foreach (var user in Model.InstructorList)
+                {
+                    <div style="display: flex; width: 100%;">
+                        <span class="col-md-2 item">@user.MaGiangVien</span>
+                        <span class="col-md-2 item">@user.HoTen</span>
+                        <span class="col-md-2 item">@user.NguoiDung.TenDangNhap</span>
+                        <span class="col-md-2 item">@user.ChuyenNganh</span>
+                        <span class="col-md-2 item">
+                            @if (user.NguoiDung.TrangThai == "Hoạt động")
+                            {
+                                <span class="iconActive"
+                                      style="padding: 8px 16px 8px 24px; color: #fff; font-weight: 400; border-radius: 99px; background-color: #248823;">
+                                    @user.NguoiDung.TrangThai
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="iconActive"
+                                      style="padding: 8px 16px 8px 24px; color: #fff; font-weight: 400; border-radius: 99px; background-color: #ff0000;">
+                                    @user.NguoiDung.TrangThai
+                                </span>
+                            }
+                        </span>
+                        <span class="col-md-2 item">
+                            <a href="ChiTietGiangVien/@user.MaGiangVien" style="width: 30px; height: 30px; background-color: #00bbf9; border-radius: 5px; display: flex; justify-content: center; align-items: center; ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" style="height: 20px; width: 20px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                </svg>
+                            </a>
+                            <a href="/QuanTriVien/XoaGiangVien/@user.MaGiangVien" style="width: 30px; height: 30px; background-color: #ff0000; border-radius: 5px; display: flex; justify-content: center; align-items: center; ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" style="height: 20px; width: 20px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </a>
+                        </span>
+                    </div>
+                }
+            </div>
+            <div class="mt-4 d-flex justify-content-center align-items-center gap-2">
+                <a href="@Url.Action("GiangVien", new { page = Model.CurrentPage - 1 })"
+                   class="btnNextPage @(Model.CurrentPage == 1 ? "disabled" : "")"
+                   @(Model.CurrentPage == 1 ? "aria-disabled=\"true\"" : "")>
+                    Trước
+                </a>
+                <div>
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        if (i == Model.CurrentPage)
+                        {
+                            <span class="btnPageItem Active">@i</span> <!-- Trang hiện tại -->
+                        }
+                        else
+                        {
+                            <a class="btnPageItem" href="@Url.Action("GiangVien", new { page = i })">@i</a>
+                        }
+                    }
+                </div>
+                <a href="@Url.Action("GiangVien", new { page = Model.CurrentPage + 1 })"
+                   class="btnNextPage @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")"
+                   @(Model.CurrentPage == Model.TotalPages ? "aria-disabled=\"true\"" : "")>
+                    Sau
+                </a>
+            </div>
+        </div>
+        <div class="mt-2">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+        </div>
+    </div>
+</div>

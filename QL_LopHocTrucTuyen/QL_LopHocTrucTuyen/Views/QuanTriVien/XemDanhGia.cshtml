@@ -1,0 +1,33 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+@model List<QL_LopHocTrucTuyen.Models.DanhGia>
+
+<div style="background-color: #eee; padding: 12px;">
+    @{
+        if (Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                HocVien hv = item.DangKy.ChiTietThanhToan.ThanhToan.HocVien;
+
+                <div style="background-color: white; padding: 16px;">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="~/Content/HinhAnh/Avatar/@hv.NguoiDung.AnhDaiDien" alt="Alternate Text" style="border-radius: 999px; width: 40px; height: 40px;" />
+                        <div>
+                            <span style="display: block; font-size: 16px; font-weight: 500">@hv.HoTen</span>
+                            <span class="text-muted small mt-1" style="display: block">@((item.NgayDanhGia.HasValue) ? item.NgayDanhGia.Value.ToString("dd-MM-yyyy") : "Không có dữ liệu")</span>
+                        </div>
+                    </div>
+                    <div style="display: flex ; align-items: center; column-gap: 5px; margin-top: 10px;">
+                        <img style="width: 15px; height: 15px;" src="~/Content/HinhAnh/Base/star.png" alt="Alternate Text" />
+                        <span>(@item.Rate)</span>
+                    </div>
+                    <span style="display: block; margin-top: 10px;">@item.NhanXet</span>
+                </div>
+            }
+        } 
+        else
+        {
+               <p style="text-align: center;">Chưa có đánh giá cho khóa học này</p>                
+        }
+    }
+</div>

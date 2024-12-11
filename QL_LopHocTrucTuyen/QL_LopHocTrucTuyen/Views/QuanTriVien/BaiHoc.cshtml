@@ -1,0 +1,139 @@
+﻿@model QL_LopHocTrucTuyen.Models.KhoaHoc
+@using QL_LopHocTrucTuyen.Models;
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<span id="bgdt" style="display: none">@ViewBag.bgdt</span>
+<span id="btdt" style="display: none">@ViewBag.btdt</span>
+
+<div class="d-flex gap-3" style="padding-right: 20px;">
+    <div style="width: 30%" class="pt-2">
+        <h1 style="font-size: 22px;" class="py-3">@Model.TenKhoaHoc</h1>  @* Hiển thị tên khoá học *@
+        @* Hiển thị các chương hiện có *@
+        <div id="chuongContainer">
+            @{
+                List<Chuong> chuongs = Model.Chuongs.OrderBy(t => t.ThuTu).ToList();
+                foreach (Chuong chuong in chuongs)
+                {
+                    <div class="accordion mb-2" id="accordion_@chuong.MaChuong">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_@chuong.MaChuong">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@chuong.MaChuong">
+                                    @chuong.TenChuong
+                                </button>
+                            </h2>
+                            <div id="collapse_@chuong.MaChuong" class="accordion-collapse collapse" data-bs-parent="#accordion_@chuong.MaChuong">
+                                <div class="accordion-body">
+                                    <div class="py-2 px-1 mb-2" style="font-style:italic;">
+                                        <p>"@chuong.MoTa"</p>
+                                    </div>
+
+                                    <ul class="list-unstyled">
+                                        @{
+                                            List<BaiGiang> baigiangs = chuong.BaiGiangs.OrderBy(t => t.ThuTu).ToList();
+                                            foreach (BaiGiang baiHoc in baigiangs)
+                                            {
+                                                <li class="border rounded-1 px-3 py-2 mb-2 d-flex justify-content-between align-items-center">
+                                                    <!-- Tên bài học ở đầu -->
+                                                    <span>@baiHoc.TenBaiGiang</span>
+
+                                                    <!-- Nhóm các nút ở cuối thẻ li -->
+                                                    <div class="d-flex gap-2">
+                                                        @if (!string.IsNullOrEmpty(baiHoc.NoiDung) || !string.IsNullOrEmpty(baiHoc.URL) || !string.IsNullOrEmpty(baiHoc.FileVideo))
+                                                        {
+                                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="loadBaiGiang('@baiHoc.MaBaiGiang')">Xem bài giảng</a>
+                                                        }
+                                                    </div>
+                                                </li>
+                                            }
+
+                                            List<BaiTap> baitaps = chuong.BaiTaps.OrderBy(t => t.ThuTu).ToList();
+                                            foreach (BaiTap bt in baitaps)
+                                            {
+                                                <li class="border border-primary rounded-1 px-3 py-2 mb-2 d-flex justify-content-between align-items-center">
+
+                                                    <span class="text-primary">@bt.TenBaiTap</span>
+
+                                                    <div class="d-flex gap-2">
+                                                        @if (!string.IsNullOrEmpty(bt.FileUpload))
+                                                        {
+                                                            <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="loadBaiTap('@bt.MaBaiTap')">Xem bài tập</a>
+                                                        }
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div style="width: 70%">
+        <div id="partialViewContainer">
+            <!-- Nội dung của bài giảng sẽ được load vào đây -->
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function loadBaiGiang(mabg) {
+        $.ajax({
+            url: '/QuanTriVien/XemBaiGiang', // Đường dẫn đến action XemBaiGiang
+            type: 'GET',
+            data: { mabg: mabg },
+            success: function (result) {
+                // Đưa kết quả trả về vào div container
+                $('#partialViewContainer').html(result);
+            },
+            error: function (xhr, status, error) {
+                console.log('Error loading the lecture:', error);
+            }
+        });
+    }
+
+    function loadBaiTap(mabt) {
+        $.ajax({
+            url: '/QuanTriVien/XemBaiTap', // Đường dẫn đến action XemBaiGiang
+            type: 'GET',
+            data: { mabt: mabt },
+            success: function (result) {
+                // Đưa kết quả trả về vào div container
+                $('#partialViewContainer').html(result);
+            },
+            error: function (xhr, status, error) {
+                console.log('Error loading the lecture:', error);
+            }
+        });
+    }
+
+    // Gọi hàm load bài giảng mặc định (ví dụ bài giảng đầu tiên)
+    var firstBaiGiangId = document.getElementById("bgdt").textContent;
+    var firstBaiTapId = document.getElementById("btdt").textContent;
+    if (firstBaiGiangId != "" && firstBaiTapId != "") {
+        $(document).ready(function () {
+
+            // Nếu có bài giảng đầu tiên, tự động load bài giảng
+            if (firstBaiGiangId !== 'null') {
+                loadBaiGiang(firstBaiGiangId);
+            }
+        });
+    }
+
+    if (firstBaiGiangId == "" && firstBaiTapId != "") {
+        $(document).ready(function () {
+
+            // Nếu có bài giảng đầu tiên, tự động load bài giảng
+            if (firstBaiTapId !== 'null') {
+                loadBaiTap(firstBaiTapId);
+            }
+        });
+    }
+</script>

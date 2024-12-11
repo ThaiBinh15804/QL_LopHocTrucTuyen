@@ -1,0 +1,24 @@
+﻿@model QL_LopHocTrucTuyen.Models.BaiTap
+
+<div class="row m-3">
+    <!-- Phần chỉnh sửa -->
+    <div class="col-12">
+        <div class="fw-bold text-center mb-4">
+            <h2>@Html.DisplayFor(model => model.TenBaiTap)</h2>
+        </div>
+
+        <div class="fw-bold">
+            <div class="my-3">
+                <h4>Mô tả: @Html.DisplayFor(model => model.MoTa)</h4>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-12">
+        <iframe id="fileFrame" src="@Url.Content("~/Content/File/BaiTap/" + Model.FileUpload)" style="width:100%; height:500px" frameborder="1" allowfullscreen></iframe>
+    </div>
+
+</div>
+
+
