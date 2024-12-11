@@ -1,0 +1,169 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+@using System.Globalization;
+@model  QL_LopHocTrucTuyen.Models.KhoaHoc
+
+@{
+    ViewBag.Title = "Chi Tiết Khóa Học - " + Model.TenKhoaHoc;
+    Layout = "~/Views/Shared/_LayoutHocVien.cshtml";
+    var toastMessage = TempData["ToastMessage"] as string;
+    var warningMessage = TempData["warning"] as string;
+}
+
+<div class="container mt-4">
+  @if (!string.IsNullOrEmpty(toastMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @toastMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (!string.IsNullOrEmpty(warningMessage))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @warningMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+    <div class="row">
+        <!-- Cột trái: Ảnh bìa khóa học và thông tin nhanh -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <img src="~/Content/HinhAnh/KhoaHoc/@Model.AnhBia" alt="Ảnh khóa học" class="card-img-top rounded">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-danger fw-bold">@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", Model.Gia)</h5>
+                    <p class="text-muted"><strong>Đánh giá:</strong> 4.9 <i class="bi bi-star-fill text-warning"></i> (265 xếp hạng)</p>
+
+                    <div class="d-flex flex-column align-items-center">
+
+
+                        @if (Session["UserId"] == null)
+                        {
+                            <button class="btn btn-primary mb-2" style="width: 70%;" onclick="window.location.href='/HocVien/DangNhap'">Đăng nhập để tiếp tục</button>
+                        }
+                        else
+                        {
+                            if (ViewBag.IsPaid)
+                            {
+                                <button class="btn btn-primary mb-2" style="width: 70%;" onclick="window.location.href='/HocVien/HocTap'">Chuyển đến trang học tập</button>
+                            }
+                            else
+                            {
+                                 <form action="@Url.Action("ThemVaoGioHang", "HocVien")" method="post">
+                                    <input type="hidden" name="id" value="@Model.MaKhoaHoc" />
+                                    <button type="submit" class="btn btn-primary mb-2" style="width: 100%;">Thêm vào giỏ hàng</button>
+                                </form>
+                                <form action="@Url.Action("MuaNgay", "HocVien")" method="post">
+                                    <input type="hidden" name="id" value="@Model.MaKhoaHoc" />
+                                    <button type="submit" class="btn btn-success mb-2" style="width: 100%;">Mua ngay</button>
+                                </form>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cột phải: Thông tin chi tiết khóa học -->
+        <div class="col-md-8">
+            <h1 class="mb-3">@Model.TenKhoaHoc</h1>
+            <p><strong>Giảng viên:</strong> @Model.GiangVien.HoTen</p>
+            <p><strong>Loại khóa học:</strong> @Model.LoaiKhoaHoc.MoTa</p>
+
+            <hr>
+
+            <h4>Mô tả khóa học</h4>
+            <p>@Model.MoTa</p>
+
+            <hr>
+
+            <h4>Nội dung bài học</h4>
+            <p>@Model.Chuongs.Count phần - @Model.Chuongs.Sum(ch => ch.BaiGiangs.Count) bài giảng - Tổng thời lượng: 25 giờ 33 phút</p>
+
+            <!-- Nội dung chi tiết từng chương và bài giảng -->
+            <div class="accordion" id="courseContent">
+                @foreach (var chuong in Model.Chuongs)
+                {
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="heading-@chuong.MaChuong">
+                            <button class="accordion-button collapsed bg-light text-dark fw-bold d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@chuong.MaChuong" aria-expanded="false" aria-controls="collapse-@chuong.MaChuong" style="box-shadow: none;">
+                                @chuong.TenChuong (@chuong.BaiGiangs.Count bài giảng)
+                            </button>
+                        </h2>
+                        <div id="collapse-@chuong.MaChuong" class="accordion-collapse collapse" aria-labelledby="heading-@chuong.MaChuong" data-bs-parent="#courseContent">
+                            <div class="accordion-body bg-white">
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var baiGiang in chuong.BaiGiangs)
+                                    {
+                                        <li class="list-group-item d-flex align-items-center bg-light border-0">
+                                            <i class="bi bi-play-circle text-warning me-2" style="font-size: 1.2rem;"></i>
+                                            <span class="fw-bold">@baiGiang.TenBaiGiang</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <hr>
+            <h4>Thông tin khóa học</h4>
+            <p><strong>Ngày bắt đầu:</strong> @(Model.NgayBatDau.HasValue ? Model.NgayBatDau.Value.ToString("dd/MM/yyyy") : "Chưa xác định")</p>
+            <p><strong>Ngày kết thúc:</strong> @(Model.NgayKetThuc.HasValue ? Model.NgayKetThuc.Value.ToString("dd/MM/yyyy") : "Chưa xác định")</p>
+
+            <hr>
+
+            <h4>Đánh giá và nhận xét</h4>
+            <div>
+                <p><strong>4.6</strong> <i class="bi bi-star-fill text-warning"></i> (265 xếp hạng)</p>
+                <p>Cho các học viên khác biết trải nghiệm của bạn với khóa học này!</p>
+                <button class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#danhGiaModal">Thêm đánh giá của bạn</button>
+            </div>
+
+            <!-- Danh sách các nhận xét -->
+            <div class="ms-4" id="commentsSection">
+                @foreach (var danhGia in Model.DanhGias)
+                {
+                    <div class="d-flex align-items-start mb-3">
+                        <img src="~/Content/HinhAnh/Base/Default_Avatar.png" alt="User Avatar" class="rounded-circle me-3" width="40" height="40">
+                        <div>
+                            <strong>@danhGia.DangKy.ChiTietThanhToan.ThanhToan.HocVien.HoTen</strong> -
+                            <span>@danhGia.Rate sao</span>
+                            <p>@danhGia.NhanXet</p>
+                            <small>Ngày đánh giá: @danhGia.NgayDanhGia.ToString()</small>
+                        </div>                       
+                    </div>
+                }
+            </div>
+            <!-- Modal đánh giá -->
+            <div class="modal fade" id="danhGiaModal" tabindex="-1" aria-labelledby="danhGiaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="danhGiaModalLabel">Đánh Giá Khóa Học</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Giúp các học viên khác bằng cách chia sẻ trải nghiệm của bạn.</p>
+                            <form action="@Url.Action("LuuDanhGia", "HocVien")" method="post">
+                                <input type="hidden" name="maKhoaHoc" value="@Model.MaKhoaHoc" />
+                                <div class="mb-3">
+                                    <label for="rate" class="form-label">Xếp hạng khóa học này</label>
+                                    <select id="rate" name="rate" class="form-control">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <option value="@i">@i sao</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nhanXet" class="form-label">Nhận xét</label>
+                                    <textarea id="nhanXet" name="nhanXet" class="form-control" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+       

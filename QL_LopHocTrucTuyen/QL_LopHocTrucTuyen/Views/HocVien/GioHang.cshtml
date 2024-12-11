@@ -1,0 +1,128 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+@model GioHang
+
+@{
+    ViewBag.Title = "Giỏ Hàng";
+    Layout = "~/Views/Shared/_LayoutHocVien.cshtml";
+    var selectedCourseId = ViewBag.SelectedCourseId;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Giỏ Hàng</h2>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">@TempData["Message"]</div>
+    }
+
+    @if (Model != null && Model.ct.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Khóa học</th>
+                        <th>Đơn Giá</th>
+                        <th>Mã Giảm Giá</th>
+                        <th>Thực trả</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ct)
+                    {
+                        List<KhoaHoc_GiamGia> dsGG = item.kh.KhoaHoc_GiamGias.Where(t => t.GiamGia.NgayKetThuc <= DateTime.Now).ToList();
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="~/Content/HinhAnh/KhoaHoc/@item.kh.AnhBia" alt="@item.kh.TenKhoaHoc" style="width: 50px; height: 50px; margin-right: 10px;" />
+                                    <span>@item.kh.TenKhoaHoc</span>
+                                </div>
+                            </td>
+                            <td>@item.kh.Gia</td> <!-- Giá gốc -->
+                            <td>
+                                <select class="form-select discount-code" data-id="@item.kh.MaKhoaHoc">
+                                    <option value="">Chọn mã giảm giá</option>
+                                    @foreach (var discountOption in dsGG)
+                                    {
+                                        <option value="@discountOption.MaGiamGia" data-discount="@discountOption.GiamGia.PhanTramGiam">
+                                            @discountOption.MaGiamGia - @discountOption.GiamGia.PhanTramGiam%
+                                        </option>
+                                    }
+                                </select>
+                            </td>
+
+                            <td class="item-total" data-original-price="@item.kh.Gia" data-finalprice="@item.kh.Gia">
+                                @item.kh.Gia VND
+                            </td>
+
+                            <td>
+                                @using (Html.BeginForm("XoaKhoiGioHang", "HocVien", FormMethod.Post, new { @class = "d-inline" }))
+                                {
+                                    <input type="hidden" name="selectedCourses" value="@item.kh.MaKhoaHoc" />
+                                    <button type="submit" id="btnXoa" class="btn btn-danger">Xóa</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tổng Giỏ Hàng -->
+        <div class="mt-4 p-3 border rounded mb-3" style="max-width: 350px; margin-left: auto;">
+            <h4 class="mb-3">Cộng giỏ hàng</h4>
+            <div class="d-flex justify-content-between fw-bold">
+                <span>Tổng</span>
+                <span id="total">@ViewBag.TongTien</span>
+            </div>
+            <a href="/HocVien/ChiTietThanhToan" class="btn btn-primary w-100 mt-3">Thanh toán</a>
+        </div>
+    }
+    else
+    {
+        <p>Giỏ hàng trống.</p>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Khi thay đổi mã giảm giá
+        $('.discount-code').on('change', function () {
+            var courseId = $(this).data('id'); // Lấy ID khóa học từ phần tử select
+            var discountCode = $(this).val(); // Lấy mã giảm giá được chọn
+            var $itemRow = $(this).closest('tr'); // Lấy hàng hiện tại
+
+            if (!courseId) {
+                alert("Không tìm thấy mã khóa học. Vui lòng thử lại!");
+                return;
+            }
+
+            // Gọi AJAX để cập nhật giá
+            $.ajax({
+                url: '/HocVien/CapNhatGiamGia', // Controller xử lý
+                type: 'POST',
+                data: {
+                    maKhoaHoc: courseId,
+                    maGiamGia: discountCode
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Cập nhật giá hiển thị
+                        $itemRow.find('.item-total').text(response.giaThucTra + ' VND');
+                        $itemRow.find('.item-total').data('finalprice', response.giaThucTra);
+
+                        // Cập nhật tổng tiền
+                        $('#total').text(response.tongTien + ' VND');
+                    } else {
+                        alert('Không thể áp dụng mã giảm giá. Vui lòng thử lại!');
+                        }
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi khi cập nhật mã giảm giá.');
+                }
+            });
+        });
+    });
+</script>

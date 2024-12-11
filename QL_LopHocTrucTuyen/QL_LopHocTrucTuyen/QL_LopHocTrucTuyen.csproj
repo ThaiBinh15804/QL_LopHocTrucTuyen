@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -130,14 +132,17 @@
     <Compile Include="Controllers\GiangVienController.cs" />
     <Compile Include="Controllers\HocVienController.cs" />
     <Compile Include="Controllers\QuanTriVienController.cs" />
+    <Compile Include="Filter\YeuCauDangNhap.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BinhLuan.cs" />
     <Compile Include="Models\DataClasses1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses1.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\GioHang.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -436,6 +441,23 @@
     <Content Include="Views\GiangVien\XoaBaiTap.cshtml" />
     <Content Include="Views\GiangVien\XoaChuong.cshtml" />
     <Content Include="Views\GiangVien\DanhGia.cshtml" />
+    <Content Include="Views\Shared\_LayoutHocVien.cshtml" />
+    <Content Include="Views\HocVien\TrangChu.cshtml" />
+    <Content Include="Views\HocVien\HocTap.cshtml" />
+    <Content Include="Views\HocVien\KhoaHoc.cshtml" />
+    <Content Include="Views\HocVien\ThongTinNguoiDung.cshtml" />
+    <Content Include="Views\HocVien\GioHang.cshtml" />
+    <Content Include="Views\HocVien\DangNhap.cshtml" />
+    <Content Include="Views\HocVien\DangKy.cshtml" />
+    <Content Include="Views\HocVien\ChiTietThanhToan.cshtml" />
+    <Content Include="Views\HocVien\ChiTietKhoaHoc.cshtml" />
+    <Content Include="Views\HocVien\ThongTinThanhToan.cshtml" />
+    <Content Include="Views\HocVien\LoaiKhoaHoc.cshtml" />
+    <Content Include="Views\HocVien\XemBaiTap.cshtml" />
+    <Content Include="Views\HocVien\NopBaiTap.cshtml" />
+    <Content Include="Views\HocVien\BaiGiang.cshtml" />
+    <Content Include="Views\HocVien\XemBinhLuan.cshtml" />
+    <Content Include="Views\HocVien\ChiTietBaiTap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,40 @@
+﻿@model List<QL_LopHocTrucTuyen.Models.KhoaHoc>
+@using System.Globalization
+@{
+    ViewBag.Title = "TrangChu";
+    Layout = "~/Views/Shared/_LayoutHocVien.cshtml";
+}
+
+<!-- Divider line (Gạch ngang phân cách) -->
+@Html.Action("LoaiKhoaHoc")
+
+<!-- Nội dung chính của trang chủ -->
+<div class="container mt-4">
+    <h3>Danh sách các khóa học</h3>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <a href="@Url.Action("ChiTietKhoaHoc", "HocVien", new { id = item.MaKhoaHoc })" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm">
+                        <img src="~/Content/HinhAnh/KhoaHoc/@item.AnhBia"
+                             class="card-img-top" alt="Ảnh khóa học" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">@item.TenKhoaHoc</h5>
+                            <p class="card-text text-muted">Giảng viên: @item.GiangVien.HoTen</p>
+                            <p class="card-text text-warning">
+                                @for (var i = 0; i < 5; i++)
+                                { <i class="bi bi-star-fill"></i> } <!-- Thêm ngôi sao đánh giá -->
+                                <span class="text-dark">(100)</span>
+                            </p>
+                            <p class="card-text text-danger fw-bold">@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", item.Gia)</p>
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+
