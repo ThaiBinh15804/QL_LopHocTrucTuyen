@@ -1,0 +1,130 @@
+﻿@model QL_LopHocTrucTuyen.Models.DangKy_BaiTap
+@{
+    ViewBag.Title = "ChiTietBaiTap";
+    Layout = "~/Views/Shared/_LayoutHocVien.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 900px;">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="mb-0"><i class="fas fa-file-alt me-2"></i>Chi Tiết Bài Tập</h3>
+        </div>
+        <div class="card-body px-5">
+            @if (ViewBag.ThongBao != null)
+            {
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-exclamation-circle me-2"></i>@ViewBag.ThongBao
+                </div>
+            }
+            else
+            {
+                <!-- Tên bài tập -->
+                <div class="row mb-3">
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <i class="fas fa-book-open me-2 text-primary"></i>
+                        <strong>Tên Bài Tập:</strong>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>@Model.BaiTap.TenBaiTap</span>
+                    </div>
+                </div>
+                <!-- Mô tả -->
+                <div class="row mb-3">
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <i class="fas fa-info-circle me-2 text-info"></i>
+                        <strong>Mô Tả:</strong>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>@Model.BaiTap.MoTa</span>
+                    </div>
+                </div>
+                <!-- Điểm -->
+                <div class="row mb-3">
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <i class="fas fa-star me-2 text-warning"></i>
+                        <strong>Điểm:</strong>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>@Model.Diem</span>
+                    </div>
+                </div>
+                <!-- Trạng thái -->
+                <div class="row mb-3">
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <i class="fas fa-info-circle me-2 text-secondary"></i>
+                        <strong>Trạng Thái:</strong>
+                    </div>
+                    <div class="col-sm-8">
+                        @if (Model.TrangThai == "Đã nộp")
+                        {
+                            <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> Đã nộp</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary"><i class="fas fa-times-circle me-1"></i> Chưa nộp</span>
+                        }
+                    </div>
+                </div>
+                <!-- Ngày nộp -->
+                <div class="row mb-3">
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <i class="fas fa-calendar-alt me-2 text-success"></i>
+                        <strong>Ngày Nộp:</strong>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>@(Model.NgayNop.HasValue ? Model.NgayNop.Value.ToString("dd/MM/yyyy") : "Không rõ")</span>
+                    </div>
+                </div>
+                <!-- File bài tập -->
+                <div class="row mb-3">
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <i class="fas fa-file-download me-2 text-primary"></i>
+                        <strong>Bài Tập:</strong>
+                    </div>
+                    <div class="col-sm-8">
+                        @if (string.IsNullOrEmpty(Model.FileUpload) && !Model.NgayNop.HasValue)
+                        {
+                            <a href="@Url.Action("NopBaiTap", "HocVien", new { maBaiTap = Model.MaBaiTap, maDangKy = Model.MaDangKy })" class="btn btn-warning btn-sm">
+                                <i class="fas fa-upload me-1"></i>Nộp bài tập
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("NopBaiTap", "HocVien", new { maBaiTap = Model.MaBaiTap ,maDangKy = Model.MaDangKy})" class="btn btn-primary btn-sm">
+                                <i class="fas fa-upload me-1"></i>Nộp lại bài tập
+                            </a>
+                        }
+                        @*else if (!string.IsNullOrEmpty(Model.FileUpload) && Model.NgayCham.HasValue)
+                        {
+                            <div class="d-flex gap-2 align-items-center">
+                                <a style="pointer-events: none; opacity: 0.5;" href="@Url.Action("NopBaiTap", "HocVien", new { maBaiTap = Model.MaBaiTap })" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-upload me-1"></i>Nộp lại bài tập
+                                </a>
+                                <span style="color: red; font-size: 14px;">Bài tập đã chấm</span>
+                            </div>
+                        }*@
+                    </div>
+                </div>
+                <!-- Tên khóa học -->
+                <div class="row mb-3">
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <i class="fas fa-graduation-cap me-2 text-warning"></i>
+                        <strong>Bài tập được giao:</strong>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    @if (Model.NgayNop == null)
+                    {
+                        <p style="color: red; text-align: center">Bài tập chưa nộp</p>
+                        <iframe id="avatarPreview" src="@Url.Content("~/Content/File/BaiTap/" + Model.BaiTap.FileUpload)" width="100%" height="600px" style="border: 1px solid #ddd;"></iframe>
+                    }
+                    else
+                    {
+                        <p style="color: red; text-align: center">Bài tập đã nộp</p>
+                        <iframe id="avatarPreview" src="@Url.Content("~/Content/File/BaiTap/" + Model.BaiTap.FileUpload)" width="100%" height="600px" style="border: 1px solid #ddd;"></iframe>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
