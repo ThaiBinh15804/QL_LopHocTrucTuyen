@@ -22,7 +22,7 @@ namespace QL_LopHocTrucTuyen.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="QuanLyLopHocTrucTuyen3")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="QuanLyLopHocTrucTuyen")]
 	public partial class DataClasses1DataContext : System.Data.Linq.DataContext
 	{
 		
@@ -96,7 +96,7 @@ namespace QL_LopHocTrucTuyen.Models
     #endregion
 		
 		public DataClasses1DataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["QuanLyLopHocTrucTuyen3ConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["QuanLyLopHocTrucTuyenConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
