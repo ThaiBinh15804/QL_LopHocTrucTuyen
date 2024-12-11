@@ -85,34 +85,38 @@
                                                     </a>
                                                 }
                                             </div>
-                                            <!-- Hiển thị bài tập -->
-                                            <ul class="list-group list-group-flush">
-                                                @if (baiGiang.Chuong != null && baiGiang.Chuong.BaiTaps != null && baiGiang.Chuong.BaiTaps.Any())
-                                                {
-                                                    foreach (var baiTap in baiGiang.Chuong.BaiTaps)
-                                                    {
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <i class="bi bi-file-earmark-text me-2"></i>
-                                                                <a href="@Url.Action("XemBaiTap", "HocVien", new { id = baiTap.MaBaiTap })" target="_blank" class="text-decoration-none">
-                                                                    @baiTap.TenBaiTap
-                                                                </a>
-                                                            </div>
-                                                            <a href="@Url.Action("ChiTietBaiTap", "HocVien", new { maBaiTap = baiTap.MaBaiTap})" class="btn btn-sm btn-primary">
-                                                                Chi tiết
-                                                            </a>
-                                                        </li>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <li class="list-group-item text-muted">Không có bài tập nào</li>
-                                                }
-                                            </ul>
+                                            
                                         </li>
                                     }
                                 </ul>
                             </div>
+                            @foreach (var baiGiang in chuong.BaiGiangs)
+                            {
+                            <!-- Hiển thị bài tập -->
+                                <ul class="list-group list-group-flush">
+                                    @if (baiGiang.Chuong != null && baiGiang.Chuong.BaiTaps != null && baiGiang.Chuong.BaiTaps.Any())
+                                    {
+                                        foreach (var baiTap in baiGiang.Chuong.BaiTaps)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i class="bi bi-file-earmark-text me-2"></i>
+                                                    <a href="@Url.Action("XemBaiTap", "HocVien", new { id = baiTap.MaBaiTap })" target="_blank" class="text-decoration-none">
+                                                        @baiTap.TenBaiTap
+                                                    </a>
+                                                </div>
+                                                <a href="@Url.Action("ChiTietBaiTap", "HocVien", new { maBaiTap = baiTap.MaBaiTap})" class="btn btn-sm btn-primary">
+                                                    Chi tiết
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item text-muted">Không có bài tập nào</li>
+                                    }
+                                </ul>
+                            }
                         </div>
                     </div>
                 }
