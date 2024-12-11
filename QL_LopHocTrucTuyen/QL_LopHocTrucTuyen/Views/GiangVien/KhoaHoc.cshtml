@@ -35,6 +35,12 @@
             </a>
         </li>
         <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center px-0 py-2" href="/GiangVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=DanhGia">
+                <i class=" me-1 fa-solid fa-comments me-2"></i>
+                <span>Đánh giá</span>
+            </a>
+        </li>
+        <li class="nav-item mb-2">
             <a class="nav-link d-flex align-items-center px-0 py-2" href="/GiangVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=ThietLap">
                 <i class=" me-1 fa-solid fa-cog me-2"></i>
                 <span>Thiết lập</span>
@@ -64,6 +70,9 @@
                     break;
                 case "ThietLap":
                 @Html.Action("ThietLap", "GiangVien")
+                    break;
+                case "DanhGia":
+                @Html.Action("DanhGia", "GiangVien")
                     break;
                 default:
                 @Html.Action("BaiHoc", "GiangVien")

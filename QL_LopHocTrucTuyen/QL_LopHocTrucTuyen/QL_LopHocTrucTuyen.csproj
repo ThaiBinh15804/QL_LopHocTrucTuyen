@@ -435,6 +435,7 @@
     <Content Include="Views\GiangVien\XoaBaiGiang.cshtml" />
     <Content Include="Views\GiangVien\XoaBaiTap.cshtml" />
     <Content Include="Views\GiangVien\XoaChuong.cshtml" />
+    <Content Include="Views\GiangVien\DanhGia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

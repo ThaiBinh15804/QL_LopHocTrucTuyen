@@ -677,5 +677,10 @@ namespace QL_LopHocTrucTuyen.Controllers
             TempData["Info"] = "Khoá học đã được yêu cầu phê duyệt";
             return RedirectToAction("KhoaHoc", new { makh = makh });
         }
+
+        public ActionResult DanhGia(string makh)
+        {
+            return PartialView(data.DanhGias.Where(t => t.MaKhoaHoc == makh));
+        }
     }
 }
