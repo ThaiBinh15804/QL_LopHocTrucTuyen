@@ -1,0 +1,52 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+@model IEnumerable<QL_LopHocTrucTuyen.Models.ThanhToan>
+
+@{
+    ViewBag.Title = "QuanLyThanhToan";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div>
+    <div style="padding: 8px 20px;">
+        <div class="d-flex gap-2 mt-2">
+            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-angle-right"></i>
+            <span>Danh sách thanh toán</span>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between mt-2">
+            <h1 style="font-size: 22px; font-weight: 600; color: #000;">Danh sách thanh toán</h1>
+        </div>
+
+        <div style="background-color: #fff; border-radius: 5px; width: 100%; margin-top: 20px; padding: 16px; border: 1px solid #dadada; border-radius: 5px;">
+            <div style="display:flex; border-bottom: 1px solid #dadada">
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Mã thanh toán</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Mã học viên</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Tổng tiền</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Ngày thực hiện</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Trạng thái</span>
+                <span class="col-md-2" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Thao tác</span>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; align-items: center;">
+                @foreach (var item in Model)
+                {
+                    <div style="display: flex; width: 100%">
+                        <span class="col-md-2 item" style="text-align: center;">@item.MaThanhToan</span>
+                        <span class="col-md-2 item" style="text-align: center;">@item.MaHocVien</span>
+                        <span class="col-md-2 item" style="text-align: center;">@item.SoTien</span>
+                        <span class="col-md-2 item" style="text-align: center;">@((item.NgayThanhToan.HasValue) ? item.NgayThanhToan.Value.ToString("dd-MM-yyyy") : "Không có dữ liệu")</span>
+                        <span class="col-md-2 item" style="text-align: center;">@item.TrangThai</span>
+                        <span class="col-md-2 item" style="text-align: center;">
+                            <a href="/QuanTriVien/ChiTietThanhToan?matt=@item.MaThanhToan" style="width: 30px; height: 30px; background-color: #00bbf9; border-radius: 5px; display: flex; justify-content: center; align-items: center; ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" style="height: 20px; width: 20px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                </svg>
+                            </a>
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

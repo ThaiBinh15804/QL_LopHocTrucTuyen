@@ -1,0 +1,82 @@
+﻿@model List<QL_LopHocTrucTuyen.Models.QuanTriVienModel.ChiTietThanhToanModel>
+@{
+    ViewBag.Title = "Chi tiết thanh toán";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div>
+    <div style="padding: 8px 20px;">
+        <div class="d-flex gap-2 mt-2">
+            <i style="color: #343a40" class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #343a40">Danh sách thanh toán</span>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #000;">Chi tiết</span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <h1 style="font-size: 22px; font-weight: 600; color: #000; margin-top: 20px;">Thông tin chi tiết thanh toán</h1>
+        </div>
+
+        <div style="margin-top: 15px; background-color: #fff; border-radius: 5px; padding: 16px; border: 1px solid #dadada;">
+            <span style="padding: 8px 0 16px; display: block">Thông tin thanh toán:</span>
+            <div style="margin-left: 10px" class="d-flex justify-content-between gap-4">
+                <div style="width: 100%">
+                    <label style="font-size: 15px; color: #374151; font-weight: 500;" for="MaQTV">Mã thanh toán: </label>
+                    <input name="@Model.First().MaThanhToan" value="@Model.First().MaThanhToan" readonly class="form-control mt-2" />
+                </div>
+                <div style="width: 100%">
+                    <label style="font-size: 15px; color: #374151; font-weight: 500;" for="MaNguoiDung">Tên học viên: </label>
+                    <input name="@Model.First().HoTen" value="@Model.First().HoTen" readonly class="form-control mt-2" />
+                </div>
+                <div style="width: 100%">
+                    <label style="font-size: 15px; color: #374151; font-weight: 500;" for="MaNguoiDung">Ngày thanh toán: </label>
+                    <input name="NgayThanhToan"
+                           value="@((Model.First().NgayThanhToan.HasValue) ? Model.First().NgayThanhToan.Value.ToString("dd-MM-yyyy") : "Không có dữ liệu")"
+                           readonly
+                           class="form-control mt-2" />
+                </div>
+
+                <div style="width: 100%">
+                    <label style="font-size: 15px; color: #374151; font-weight: 500;" for="MaNguoiDung">Tổng tiền thanh toán: </label>
+                    <input name="@Model.First().TongSoTienThanhToan" value="@Model.First().TongSoTienThanhToan" readonly class="form-control mt-2" />
+                </div>
+            </div>
+            <div style="width: 100%;">
+                <!-- Left Section -->
+                <div style="display:flex; border-bottom: 1px solid #dadada">
+                    <span class="col-md-4" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Tên khóa học</span>
+                    <span class="col-md-4" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Số tiền</span>
+                    <span class="col-md-4" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500;">Thực trả</span>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; align-items: center;">
+                    @foreach (var item in Model)
+                    {
+                        <div style="display: flex; width: 100%">
+                            <span class="col-md-4 item" style="text-align: center;">@item.TenKhoaHoc</span>
+                            <span class="col-md-4 item" style="text-align: center;">@item.SoTienChiTiet</span>
+                            @{
+                                if (item.MaGiamGia != null)
+                                {
+                                    decimal giam = 0;
+                                    foreach (var item2 in ViewBag.DSGiamGia)
+                                    {
+                                        if (item2.MaGiamGia == item.MaGiamGia)
+                                        {
+                                            giam = decimal.Parse(item.SoTienChiTiet.ToString()) * decimal.Parse(item2.PhanTramGiam.ToString()) / 100;
+                                            <span class="col-md-4 item" style="text-align: center;">@string.Format("{0:#,0} VNĐ", (item.SoTienChiTiet - giam))</span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="col-md-4 item" style="text-align: center;">@string.Format("{0:#,0} VNĐ", (item.SoTienChiTiet))</span>
+                                }
+}
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

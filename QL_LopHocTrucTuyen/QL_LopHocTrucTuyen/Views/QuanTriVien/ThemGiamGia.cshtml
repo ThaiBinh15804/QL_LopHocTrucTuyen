@@ -1,0 +1,79 @@
+﻿@model QL_LopHocTrucTuyen.Models.GiamGia
+@using QL_LopHocTrucTuyen.Models
+@{
+    ViewBag.Title = "ThemGiamGia";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div>
+    <div style="padding:8px 20px;">
+        <div class="d-flex gap-2 mt-2">
+            <i style="color: #343a40" class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #343a40">Danh sách mã giảm giá khóa học</span>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #000; ">Thêm mã giảm giá</span>
+        </div>
+        <div class="d-flex justify-content-between">
+            <h1 style="font-size: 22px; font-weight: 600; color: #000; margin-top: 20px; display: block">Thêm giảm giá khóa học</h1>
+            @if (TempData["ErrorMessageTaiLieu"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessageTaiLieu"]
+                </div>
+            }
+        </div>
+        <div style="background-color: #fff; border-radius: 5px; width: 100%; margin-top: 10px; padding: 16px; border: 1px solid #dadada; width: 100%;">
+            <form class="myForm" action="/QuanTriVien/ThemGiamGia" method="post">
+                <div style="width: 100%;">
+                    <div class="mt-2 d-flex justify-content-between gap-4">
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="TenGiamGia">Tên giảm giá: </label>
+                            @Html.TextBoxFor(model => model.TenGiamGia, new { @id = "TenGiamGia", @class = "form-control mt-2", placeholder = "Nhập tên giảm giá" })
+                        </div>
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="TiLeGiam">Tỉ lệ giảm (%): </label>
+                            @Html.TextBoxFor(model => model.PhanTramGiam, new { @id = "TiLeGiam", @class = "form-control mt-2", placeholder = "Nhập tỉ lệ giảm" })
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex justify-content-between gap-4">
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="NgayTao">Ngày bắt đầu: </label>
+                            @Html.TextBoxFor(model => model.NgayBatDau, new
+                                  {
+                                      @type = "date",
+                                      @id = "NgayBatDau",
+                                      @class = "form-control mt-2",
+                                      Value = Model.NgayBatDau.HasValue ? Model.NgayBatDau.Value.ToString("yyyy-MM-dd") : ""
+                                  })
+                            <span style="min-height: 20px; display: inline-block; color: red; font-size: 14px; margin-top: 5px;" class="errMoTa"></span>
+                        </div>
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="NgayTao">Ngày kết thúc: </label>
+                            @Html.TextBoxFor(model => model.NgayKetThuc, new
+                                  {
+                                      @type = "date",
+                                      @id = "NgayKetThuc",
+                                      @class = "form-control mt-2",
+                                      Value = Model.NgayKetThuc.HasValue ? Model.NgayKetThuc.Value.ToString("yyyy-MM-dd") : ""
+                                  })
+                            <span style="min-height: 20px; display: inline-block; color: red; font-size: 14px; margin-top: 5px;" class="errMoTa"></span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                </div>
+                <div style="margin-top: 10px; width: 100%" class="d-flex justify-content-end gap-2">
+                    <button id="btnLuu" type="submit" class="btn btn-success">Tạo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

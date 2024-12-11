@@ -1,0 +1,62 @@
+﻿@model QL_LopHocTrucTuyen.Models.KhoaHoc_GiamGia
+@using QL_LopHocTrucTuyen.Models
+@{
+    ViewBag.Title = "ThemKhoaHoc_GiamGia";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div>
+    <div style="padding:8px 20px;">
+        <div class="d-flex gap-2 mt-2">
+            <i style="color: #343a40" class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #343a40">Danh sách mã giảm giá khóa học</span>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #000; ">Thêm mã giảm giá cho khóa học</span>
+        </div>
+        <h1 style="font-size: 22px; font-weight: 600; color: #000; margin-top: 20px; display: block">Thêm mã giảm giá cho khóa học</h1>
+        <div style="background-color: #fff; border-radius: 5px; width: 100%; margin-top: 10px; padding: 16px; border: 1px solid #dadada; width: 100%;">
+            <form class="myForm" action="/QuanTriVien/ThemKhoaHoc_GiamGia" method="post">
+                <div style="width: 100%;">
+                    <div class="d-flex justify-content-between gap-4">
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="MaTaiLieu">Tên giảm giá: </label>
+                            <select class="mt-2 form-control" id="MaGiamGia" name="MaGiamGia" required>
+                                @foreach (var kh in ViewBag.GiamGiaListView)
+                                {
+                                    if (kh.MaGiamGia == ViewBag.MaGiamGia)
+                                    {
+                                        <option value="@kh.MaGiamGia">@kh.MaGiamGia - @kh.TenGiamGia</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div style="width: 100%">
+                            <label style="font-size: 15px; color: #374151; font-weight: 500;" for="MaKhoaHoc">Tên khóa học: </label>
+                            <select class="mt-2 form-control" id="MaKhoaHoc" name="MaKhoaHoc" required>
+                                <option value="">-- Chọn Khóa học --</option>
+                                @foreach (var kh in ViewBag.KhoaHocListView)
+                                {
+                                    <option value="@kh.MaKhoaHoc">@kh.MaKhoaHoc - @kh.TenKhoaHoc</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 10px; width: 100%" class="d-flex justify-content-end gap-2">
+                    <button id="btnLuu" type="submit" class="btn btn-success">Tạo</button>
+                </div>
+            </form>
+        </div>
+        <div style="color: red;" class="mt-2">
+            <div>
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
