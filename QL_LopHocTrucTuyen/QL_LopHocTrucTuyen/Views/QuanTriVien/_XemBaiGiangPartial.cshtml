@@ -1,0 +1,47 @@
+﻿@model QL_LopHocTrucTuyen.Models.BaiGiang
+
+<script>
+    function getYoutubeVideoId(url) {
+        var regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&]+)/;
+        var match = url.match(regex);
+        return match ? match[1] : null;
+    }
+</script>
+
+<div>
+    @* Hiển thị video nếu có *@
+    @if (!string.IsNullOrEmpty(Model.URL) || !string.IsNullOrEmpty(Model.FileVideo))
+    {
+        <div class="mb-4">
+            @if (!string.IsNullOrEmpty(Model.URL))
+            {
+                <script>
+                    var url = '@Model.URL';
+                    var videoId = getYoutubeVideoId(url);
+                    if (videoId) {
+                        var embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '500px';
+                        iframe.src = embedUrl;
+                        iframe.frameBorder = '0';
+                        iframe.allowFullscreen = true;
+
+                        document.getElementById('videoContainer').appendChild(iframe);
+                    }
+                </script>
+            }
+            else if (!string.IsNullOrEmpty(Model.FileVideo))
+            {
+                var fileUrl = Url.Content("~/Content/Video/BaiGiang" + Model.FileVideo);
+                <video id="my-video" class="video-js" controls preload="auto" style="width:100%; height:500px;" data-setup="{}">
+                    <source src="@fileUrl" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            }
+        </div>
+    }
+</div>
+
+<div id="videoContainer"></div>
+<h1 style="margin-top: 15px; font-size: 22px; font-weight: 500;">@Model.TenBaiGiang</h1>

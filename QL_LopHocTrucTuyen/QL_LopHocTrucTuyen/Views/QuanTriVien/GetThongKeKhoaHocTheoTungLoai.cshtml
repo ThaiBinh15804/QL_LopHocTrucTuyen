@@ -1,0 +1,28 @@
+﻿@model List<QL_LopHocTrucTuyen.Models.QuanTriVienModel.KhoaHocTheoLoai>
+@{
+    int index = 1; // Bắt đầu từ 1 nếu bạn muốn thứ tự bắt đầu từ 1
+}
+
+@if (Model != null && Model.Any())
+{
+    <div style="background-color: white;">
+        <h1 style="font-size: 16px; font-weight: 500;" class="p-3">Thống kê số lượng khóa học theo danh mục khóa học</h1>
+        <div style="display:flex; border-bottom: 1px solid #dadada">
+            <span class="col-md-4" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">STT</span>
+            <span class="col-md-4" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Tên loại</span>
+            <span class="col-md-4" style="text-align: center; padding: 10px 8px; color: #7f7f7f; font-weight: 500; ">Số lượng khóa học</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; height: 310px; overflow-y: auto;">
+            @foreach (var user in Model)
+            {
+                <div style="display: flex; width: 100%">
+                    <span class="col-md-4 item">@index</span>
+                    <span class="col-md-4 item">@user.TenLoaiKhoaHoc</span>
+                    <span class="col-md-4 item">@user.SoKhoaHoc</span>
+                </div>
+                index++;
+            }
+        </div>
+    </div>
+}
+

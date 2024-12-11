@@ -1,0 +1,55 @@
+﻿@model List<QL_LopHocTrucTuyen.Models.QuanTriVienModel.DoanhThuTheoThang>
+
+@if (Model != null && Model.Any())
+{
+    <div style="background-color: white;">
+        <h1 style="font-size: 16px; font-weight: 500;" class="p-3">Doanh thu khóa học theo tháng</h1>
+        <div style="max-width: 100%; width: 100%; height: 350px;">
+            <canvas style="width: 100%; height: 100%;" id="revenueChart"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            window.onload = function () {
+                var doanhthuData = @Html.Raw(ViewBag.DoanhThuData);
+
+                const months = doanhthuData.map(function(item) { return item.ThangNam});  // Lấy tháng năm
+                const revenues = doanhthuData.map(function(item) { return item.DoanhThu});  // Lấy doanh thu
+
+                // Lấy đối tượng canvas để vẽ biểu đồ
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+
+                // Tạo biểu đồ với Chart.js
+                const revenueChart = new Chart(ctx, {
+                    type: 'line',  // Biểu đồ dạng đường
+                    data: {
+                        labels: months,  // Các tháng
+                        datasets: [{
+                            label: 'Doanh thu (VND)',
+                            data: revenues,  // Dữ liệu doanh thu
+                            borderColor: 'rgba(75, 192, 192, 1)',  // Màu đường biểu đồ
+                            fill: false,  // Không tô màu dưới biểu đồ
+                            tension: 0.1   // Làm cho các điểm mượt mà hơn
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                type: 'logarithmic',  // Sử dụng log scale cho trục Y
+                                position: 'right',
+                                ticks: {
+                                    callback: function(value, index, values) {
+                                        // Tùy chỉnh cách hiển thị giá trị trên trục Y
+                                        return value.toLocaleString();  // Hiển thị số có dấu phẩy phân cách
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+        </script>
+    </div>
+}
+
+
+

@@ -1,0 +1,114 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+@model QL_LopHocTrucTuyen.Models.KhoaHoc
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="pt-3">
+    @{
+        List<Chuong> chuongs = Model.Chuongs.OrderBy(t => t.ThuTu).ToList();
+        foreach (Chuong chuong in chuongs)
+        {
+            <div class="accordion mb-2" id="accordion_@chuong.MaChuong">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_@chuong.MaChuong">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@chuong.MaChuong">
+                            @chuong.TenChuong
+                        </button>
+                    </h2>
+                    <div id="collapse_@chuong.MaChuong" class="accordion-collapse collapse" data-bs-parent="#accordion_@chuong.MaChuong">
+                        <div class="accordion-body">
+                            <div class="my-3">
+                                <h5 class="text-primary" style="text-align: center; padding: 8px 0;">Bài Tập Đã Chấm</h5>
+                                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                    <table class="table table-bordered">
+                                        <thead style="background-color: #eee">
+                                            <tr>
+                                                <th>Học Viên</th>
+                                                <th>Tên Bài Tập</th>
+                                                <th>Điểm</th>
+                                                <th>Ngày Nộp</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                var baiTapDaCham = Model.DangKies
+                                                    .SelectMany(dk => dk.DangKy_BaiTaps.Where(b => b.Diem != null && b.BaiTap.MaChuong == chuong.MaChuong))
+                                                    .ToList();
+
+                                                if (baiTapDaCham.Any())
+                                                {
+                                                    foreach (var baiTap in baiTapDaCham)
+                                                    {
+                                                        <tr style="cursor: pointer;" onclick="window.location.href='/QuanTriVien/ChamDiem/?mabt=@baiTap.MaBaiTap&madk=@baiTap.MaDangKy'">
+                                                            <td>@baiTap.DangKy.ChiTietThanhToan.ThanhToan.HocVien.HoTen</td>
+                                                            <td>@baiTap.BaiTap.TenBaiTap</td>
+                                                            <td>@baiTap.Diem</td>
+                                                            <td>@DateTime.Parse(baiTap.NgayNop.ToString()).ToString("dd/MM/yyyy")</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="4" class="text-center">Chưa có bài tập nào đã chấm.</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="my-3">
+                                <h5 class="text-warning" style="text-align: center; padding: 8px 0;">Bài Tập Chưa Chấm</h5>
+                                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                    <table class="table table-bordered">
+                                        <thead style="background-color: #eee ">
+                                            <tr>
+                                                <th>Học Viên</th>
+                                                <th>Tên Bài Tập</th>
+                                                <th>Ngày Nộp</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                var baiTapChuaCham = Model.DangKies
+                                                    .SelectMany(dk => dk.DangKy_BaiTaps.Where(b => b.Diem == null && b.BaiTap.MaChuong == chuong.MaChuong && b.NgayNop != null))
+                                                    .ToList();
+
+                                                if (baiTapChuaCham.Any())
+                                                {
+                                                    foreach (var baiTap in baiTapChuaCham)
+                                                    {
+                                                        <tr style="cursor: pointer;" onclick="window.location.href='/GiangVien/ChamDiem/?mabt=@baiTap.MaBaiTap&madk=@baiTap.MaDangKy'">
+                                                            <td>@baiTap.DangKy.ChiTietThanhToan.ThanhToan.HocVien.HoTen</td>
+                                                            <td>@baiTap.BaiTap.TenBaiTap</td>
+                                                            <td>@DateTime.Parse(baiTap.NgayNop.ToString()).ToString("dd/MM/yyyy")</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="3" class="text-center">Không có bài tập nào chưa chấm.</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+

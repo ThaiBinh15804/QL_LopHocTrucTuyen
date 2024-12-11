@@ -1,0 +1,48 @@
+﻿@model QL_LopHocTrucTuyen.Models.KhoaHoc
+@using QL_LopHocTrucTuyen.Models
+
+<div class="d-flex mt-3">
+    <div style="width: 25%; border-radius: 10px;">
+        <img src="~/Content/HinhAnh/KhoaHoc/@Model.AnhBia" alt="@Model.TenKhoaHoc" style="display: block ; width: 100%; height: 150px; border-top-left-radius: 5px; border-top-right-radius: 5px; " />
+        <div style="padding: 8px 12px 0; height: 150px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border: 1px solid #dadada; background-color: #fff;">
+            @if (Model.TrangThai == "Đã duyệt")
+            {
+                <span style="font-size: 14px; display: block; margin: 10px 0;">
+                    Trạng thái:
+                    <span style="padding: 4px 12px; background-color: #248823; color: #fff; border-radius: 20px; font-size: 12px;">Đã duyệt</span>
+                    <span style="font-size: 15px; display: block;  margin-top: 15px; font-weight: 500; color: #ff0000; ">
+                        Giá: @String.Format("{0:N0}", Model.Gia) đ
+                    </span>
+                </span>
+            }
+            else
+            {
+                <span style="font-size: 14px; display: block; margin: 25px 0;">
+                    Trạng thái:
+                    <span style="padding: 4px 12px; background-color: #ffb703; color: #000; border-radius: 20px; font-size: 12px;">Chưa duyệt</span>
+                </span>
+            }
+        </div>
+    </div>
+    <div style="width: 70%; margin-left: 20px;">
+        <h1 style="font-size: 22px; font-weight: 500;">@Model.TenKhoaHoc</h1>
+        <span style="font-size: 15px; display: block; margin-top: 15px; color: #343a40; ">Giảng viên: @Model.GiangVien.HoTen</span>
+        <div style="margin: 15px 0; height: 1px; width: 100%; background-color: #dadada;"></div>
+        <h2 style="font-size: 18px; font-weight: 500;">Mô tả khóa học:</h2>
+        <span style="font-size: 15px; display: block; margin-top: 15px; color: #343a40; ">@Model.MoTa</span>
+        <div style="margin: 15px 0; height: 1px; width: 100%; background-color: #dadada;"></div>
+        <h3 style="font-size: 18px; font-weight: 500;">Thông tin khóa học:</h3>
+        <span style="font-size: 15px; display: block; margin-top: 15px; color: #343a40; ">Ngày bắt đầu: @(Model.NgayBatDau.HasValue ? Model.NgayBatDau.Value.ToString("dd/MM/yyyy") : "N/A")</span>
+        <span style="font-size: 15px; display: block; margin-top: 15px; color: #343a40; ">Ngày kết thúc: @(Model.NgayBatDau.HasValue ? Model.NgayKetThuc.Value.ToString("dd/MM/yyyy") : "N/A")</span>
+
+        <div style="margin: 15px 0; height: 1px; width: 100%; background-color: #dadada;"></div>
+        <h2 style="font-size: 18px; font-weight: 500;">Khóa học này bao gồm:</h2>
+        <span style="font-size: 15px; display: block; margin-top: 15px; color: #343a40;">Tổng @ViewBag.SoLuongChuong chương khóa học</span>
+        <span style="font-size: 15px; display: block; margin-top: 15px; color: #343a40;">Với @ViewBag.SoLuongBaiGiang bài giảng trong khóa học</span>
+        <span style="font-size: 15px; display: block; margin-top: 15px; color: #343a40;">Với @ViewBag.SoLuongBaiTap bài tập trong khóa học</span>
+
+        <div style="margin: 15px 0; height: 1px; width: 100%; background-color: #dadada;"></div>
+        <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 10px;">Đánh giá và nhận xét:</h2>
+        @Html.Action("XemDanhGia", new {makh = Model.MaKhoaHoc})
+    </div>
+</div>

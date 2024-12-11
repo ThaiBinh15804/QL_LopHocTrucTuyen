@@ -1,0 +1,26 @@
+﻿@model List<QL_LopHocTrucTuyen.Models.KhoaHoc>
+
+<div style="background-color: #fff; border-radius: 5px; width: 100%; margin-top: 10px; padding: 16px; border: 1px solid #dadada; width: 100%;">
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-3" style="border-radius: 10px;">
+                <img src="~/Content/HinhAnh/KhoaHoc/@item.AnhBia" alt="@item.TenKhoaHoc" style="display: block ; width: 100%; height: 150px; border-top-left-radius: 5px; border-top-right-radius: 5px; " />
+                <div style="padding: 8px 12px 0; height: 170px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border: 1px solid #dadada; background-color: #fff;">
+                    <span style="font-size: 16px; font-weight: 500;">@item.TenKhoaHoc</span>
+                    @*<span style="font-size: 14px; display: block; margin-top: 15px; color: #7f7f7f; ">Giảng viên: @item.GiangVien.HoTen</span>*@
+                    <span style="font-size: 14px; display: block; margin: 20px 0;">
+                        Trạng thái:
+                        <span style="padding: 4px 12px; background-color: #248823; color: #fff; border-radius: 20px; font-size: 12px;">@item.TrangThai</span>
+                        <span style="font-size: 15px; display: block;  margin-top: 15px; font-weight: 500; color: #ff0000; ">
+                            Giá: @String.Format("{0:N0}", item.Gia) đ
+                        </span>
+                    </span>
+                    <div class="d-flex justify-content-end">
+                        <a href="/QuanTriVien/ChiTietKhoaHoc?makh=@item.MaKhoaHoc" class="btn btn-primary">Chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

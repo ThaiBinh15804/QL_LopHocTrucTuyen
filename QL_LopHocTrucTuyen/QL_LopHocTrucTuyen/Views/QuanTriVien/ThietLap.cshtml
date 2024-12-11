@@ -1,0 +1,120 @@
+﻿@using QL_LopHocTrucTuyen.Models;
+
+@model QL_LopHocTrucTuyen.Models.KhoaHoc
+
+<div class="my-2">
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info my-3" role="alert">
+            @TempData["Info"]
+        </div>
+    }
+
+    <div class="edit-course">
+        <div>
+            <input type="hidden" name="MaKhoaHoc" value="@Model.MaKhoaHoc" />
+
+            <div class="mb-4">
+                <label for="loaiKhoaHoc" class="fw-bold">Loại khóa học</label>
+                <select disabled name="LoaiKhoaHoc" id="loaiKhoaHoc" class="form-select">
+                    @{
+                        var lst = (List<LoaiKhoaHoc>)ViewBag.LoaiKhoaHocs;
+                        foreach (var item in lst)
+                        {
+                            var selected = Model.MaLoaiKhoaHoc == item.MaLoaiKhoaHoc ? "selected" : "";
+                            <option value="@item.MaLoaiKhoaHoc" @selected>@item.TenLoai</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="tenKhoaHoc" class="py-2 fw-bold">Tên khóa học</label>
+                <input disabled type="text" class="form-control" id="tenKhoaHoc" name="TenKhoaHoc" value="@Model.TenKhoaHoc" required>
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="moTa" class="py-2 fw-bold">Mô tả khóa học</label>
+                <textarea disabled class="form-control" id="moTa" name="MoTa" rows="4" required>@Model.MoTa</textarea>
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="ngayBatDau" class="py-2 fw-bold">Ngày bắt đầu</label>
+                <input disabled type="datetime" class="form-control" id="ngayBatDau" name="NgayBatDau" value="@Model.NgayBatDau">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="ngayKetThuc" class="py-2 fw-bold">Ngày kết thúc</label>
+                <input disabled type="datetime" class="form-control" id="ngayKetThuc" name="NgayKetThuc" value="@Model.NgayKetThuc">
+            </div>
+
+
+            <div class="form-group mb-4">
+                <label for="trangThai" class="py-2 fw-bold">Trạng thái khóa học</label>
+                <div class="d-flex gap-2 align-items-center">
+                    <input type="text" class="form-control w-75" disabled id="TrangThai" name="TrangThai" value="@Model.TrangThai">
+
+                    <!-- Conditional Buttons -->
+                    <div class="ms-3">
+                        @if (Model.TrangThai == "Chưa duyệt")
+                        {
+                            <a href="/QuanTriVien/PheDuyetKhoaHoc/?makh=@Model.MaKhoaHoc" class="btn btn-primary">Phê duyệt</a>
+                            <a href="/QuanTriVien/TuChoiPheDuyet/?makh=@Model.MaKhoaHoc" class="btn btn-danger">Từ chối phê duyệt</a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group mb-4">
+                <label class="py-2 fw-bold">Ảnh hiện tại</label>
+                <div>
+                    @if (!string.IsNullOrEmpty(Model.AnhBia))
+                    {
+                        <img id="previewImage" src="~/Content/HinhAnh/KhoaHoc/@Model.AnhBia" alt="Ảnh bìa khóa học" class="image-preview" />
+                    }
+                    else
+                    {
+                        <img id="previewImage" src="" alt="Ảnh bìa khóa học" class="image-preview" style="display:none;" />
+                    }
+                </div>
+
+                <label for="imageUpload" class="py-2 fw-bold mt-3">Chọn ảnh mới</label>
+                <div>
+                    <input disabled type="file" class="form-control-file" id="imageUpload" name="imageUpload" accept="image/*" onchange="previewNewImage(event)">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewNewImage(event) {
+        const imagePreview = document.getElementById('previewImage');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block'; // Hiện ảnh preview
+            }
+            reader.readAsDataURL(file);
+        } else {
+            // Nếu không có file thì ẩn ảnh preview
+            imagePreview.src = '';
+            imagePreview.style.display = 'none';
+        }
+    }
+</script>
+
+<style>
+    .image-preview {
+        width: 400px; /* Kích thước hiển thị ảnh */
+        height: 300px;
+        object-fit: cover; /* Để giữ nguyên tỷ lệ ảnh */
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+</style>

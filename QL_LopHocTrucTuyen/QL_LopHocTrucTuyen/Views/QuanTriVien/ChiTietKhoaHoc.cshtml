@@ -1,0 +1,58 @@
+﻿@model QL_LopHocTrucTuyen.Models.KhoaHoc
+@using QL_LopHocTrucTuyen.Models;
+@{
+    ViewBag.Title = "ChiTietKhoaHoc";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div>
+    <div style="padding:8px 0 8px 20px;">
+        <div class="d-flex gap-2 mt-2">
+            <i style="color: #343a40" class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #343a40">Danh sách khóa học</span>
+            <i class="fa-solid fa-angle-right"></i>
+            <span style="color: #343a40">Khóa học</span>
+        </div>
+        <div class="d-flex mt-3 p-2" style="background-color: #0b5ed7; color: #fff">
+            <a style="color: white;" href="/QuanTriVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=ThongTinKhoaHoc">Thông tin</a>
+            <a style="color:white;margin-left: 25px;" href="/QuanTriVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=BaiHoc">Bài học</a>
+            <a style="color:white;margin-left: 25px;" href="/QuanTriVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=BaoCao">Báo cáo</a>
+            <a style="color:white;margin-left: 25px;" href="/QuanTriVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=BaiTap">Bài tập</a>
+            <a style="color:white;margin-left: 25px;" href="/QuanTriVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=HocVien">Học viên</a>
+            <a style="color:white;margin-left: 25px;" href="/QuanTriVien/XuLyDieuHuong/?makh=@Model.MaKhoaHoc&page=ThietLap">Thiết lập</a>
+        </div>
+        <div>
+            <div id="contentArea" style="height: auto; transition: margin-left 0.3s;">
+                @{
+                    string dieuHuong = TempData["DieuHuong"] as string;
+
+                    switch (dieuHuong)
+                    {
+                        case "ThongTinKhoaHoc":
+                            @Html.Action("ThongTinKhoaHoc", "QuanTriVien", new { makh = Model.MaKhoaHoc })
+                            break;
+                        case "BaiHoc":
+                            @Html.Action("BaiHoc", "QuanTriVien", new { makh = Model.MaKhoaHoc })
+                            break;
+                        case "HocVien":
+                            @Html.Action("HocVienKhoaHoc", "QuanTriVien", new { makh = Model.MaKhoaHoc })
+                            break;
+                        case "BaoCao":
+                            @Html.Action("BaoCaoKhoaHoc", "QuanTriVien", new { makh = Model.MaKhoaHoc })
+                            break;
+                        case "BaiTap":
+                            @Html.Action("BaiTap", "QuanTriVien", new { makh = Model.MaKhoaHoc })
+                            break;
+                        case "ThietLap":
+                            @Html.Action("ThietLap", "QuanTriVien", new { makh = Model.MaKhoaHoc })
+                            break;
+                        default:
+                            @Html.Action("ThongTinKhoaHoc", "QuanTriVien", new { makh = Model.MaKhoaHoc })
+                            break;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>  
