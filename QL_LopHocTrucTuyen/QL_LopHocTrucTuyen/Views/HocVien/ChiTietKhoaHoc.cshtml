@@ -6,44 +6,63 @@
     ViewBag.Title = "Chi Tiết Khóa Học - " + Model.TenKhoaHoc;
     Layout = "~/Views/Shared/_LayoutHocVien.cshtml";
     var toastMessage = TempData["ToastMessage"] as string;
+    var warningMessage = TempData["warning"] as string;
 }
 
 <div class="container mt-4">
+  @if (!string.IsNullOrEmpty(toastMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @toastMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (!string.IsNullOrEmpty(warningMessage))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @warningMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
     <div class="row">
         <!-- Cột trái: Ảnh bìa khóa học và thông tin nhanh -->
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <img src="~/Content/HocVien/Images/@Model.AnhBia" alt="Ảnh khóa học" class="card-img-top rounded">
+                <img src="~/Content/HinhAnh/KhoaHoc/@Model.AnhBia" alt="Ảnh khóa học" class="card-img-top rounded">
                 <div class="card-body text-center">
                     <h5 class="card-title text-danger fw-bold">@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", Model.Gia)</h5>
                     <p class="text-muted"><strong>Đánh giá:</strong> 4.9 <i class="bi bi-star-fill text-warning"></i> (265 xếp hạng)</p>
+
                     <div class="d-flex flex-column align-items-center">
 
+
                         @if (Session["UserId"] == null)
-                        {  <!-- Kiểm tra xem người dùng đã đăng nhập chưa -->
-                            <!-- Nếu chưa đăng nhập, hiển thị nút đăng nhập -->
+                        {
                             <button class="btn btn-primary mb-2" style="width: 70%;" onclick="window.location.href='/HocVien/DangNhap'">Đăng nhập để tiếp tục</button>
                         }
                         else
                         {
-                            <!-- Nếu đã đăng nhập -->
                             if (ViewBag.IsPaid)
                             {
                                 <button class="btn btn-primary mb-2" style="width: 70%;" onclick="window.location.href='/HocVien/HocTap'">Chuyển đến trang học tập</button>
                             }
                             else
                             {
-                                <!-- Nếu chưa thanh toán, hiển thị nút Thêm vào giỏ hàng và Mua ngay -->
-                                <button class="btn btn-primary mb-2" style="width: 70%;" id="addToCartBtn" onclick="addToCart(@Model.MaKhoaHoc)">Thêm vào giỏ hàng</button>
-                                <button class="btn btn-success" style="width: 70%;" onclick="buyNow(@Model.MaKhoaHoc)">Mua ngay</button>
+                                 <form action="@Url.Action("ThemVaoGioHang", "HocVien")" method="post">
+                                    <input type="hidden" name="id" value="@Model.MaKhoaHoc" />
+                                    <button type="submit" class="btn btn-primary mb-2" style="width: 100%;">Thêm vào giỏ hàng</button>
+                                </form>
+                                <form action="@Url.Action("MuaNgay", "HocVien")" method="post">
+                                    <input type="hidden" name="id" value="@Model.MaKhoaHoc" />
+                                    <button type="submit" class="btn btn-success mb-2" style="width: 100%;">Mua ngay</button>
+                                </form>
                             }
                         }
-
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- Cột phải: Thông tin chi tiết khóa học -->
         <div class="col-md-8">
             <h1 class="mb-3">@Model.TenKhoaHoc</h1>
@@ -97,14 +116,24 @@
             <div>
                 <p><strong>4.6</strong> <i class="bi bi-star-fill text-warning"></i> (265 xếp hạng)</p>
                 <p>Cho các học viên khác biết trải nghiệm của bạn với khóa học này!</p>
-                <button class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#danhGiaModal">Sửa đánh giá của bạn</button>
+                <button class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#danhGiaModal">Thêm đánh giá của bạn</button>
             </div>
 
             <!-- Danh sách các nhận xét -->
             <div class="ms-4" id="commentsSection">
-                <!-- Các nhận xét sẽ được thêm vào đây -->
+                @foreach (var danhGia in Model.DanhGias)
+                {
+                    <div class="d-flex align-items-start mb-3">
+                        <img src="~/Content/HinhAnh/Base/Default_Avatar.png" alt="User Avatar" class="rounded-circle me-3" width="40" height="40">
+                        <div>
+                            <strong>@danhGia.DangKy.ChiTietThanhToan.ThanhToan.HocVien.HoTen</strong> -
+                            <span>@danhGia.Rate sao</span>
+                            <p>@danhGia.NhanXet</p>
+                            <small>Ngày đánh giá: @danhGia.NgayDanhGia.ToString()</small>
+                        </div>                       
+                    </div>
+                }
             </div>
-
             <!-- Modal đánh giá -->
             <div class="modal fade" id="danhGiaModal" tabindex="-1" aria-labelledby="danhGiaModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -115,155 +144,26 @@
                         </div>
                         <div class="modal-body">
                             <p>Giúp các học viên khác bằng cách chia sẻ trải nghiệm của bạn.</p>
-                            <div>
-                                <label for="rate">Xếp hạng khóa học này</label>
-                                <select id="rate" class="form-control">
-                                    @for (int i = 1; i <= 5; i++)
-                                    {
-                                        <option value="@i">@i sao</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="mt-3">
-                                <label for="nhanXet">Đánh giá khóa học này</label>
-                                <textarea id="nhanXet" class="form-control" rows="3" placeholder="Nhập đánh giá của bạn"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                            <button type="button" class="btn btn-primary" onclick="luuDanhGia(@Model.MaKhoaHoc)">Gửi</button>
+                            <form action="@Url.Action("LuuDanhGia", "HocVien")" method="post">
+                                <input type="hidden" name="maKhoaHoc" value="@Model.MaKhoaHoc" />
+                                <div class="mb-3">
+                                    <label for="rate" class="form-label">Xếp hạng khóa học này</label>
+                                    <select id="rate" name="rate" class="form-control">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <option value="@i">@i sao</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nhanXet" class="form-label">Nhận xét</label>
+                                    <textarea id="nhanXet" name="nhanXet" class="form-control" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Phần tử toast luôn hiện diện trong DOM nhưng ẩn ban đầu -->
-            <div class="toast-container position-fixed top-0 end-0 p-3">
-                <div id="toastMessage" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="display: none;">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            @toastMessage
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="progress" style="height: 5px;">
-                        <div class="progress-bar bg-gradient progress-bar-animated" id="progressBar" role="progressbar" style="width: 100%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            @section Scripts {
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script>
-        function addToCart(maKhoaHoc) {
-            $.post('/HocVien/ThemVaoGioHang', { id: maKhoaHoc }, function(response) {
-                if (response.success) {
-                    showToast(response.message); // Hiển thị thông báo thành công
-                } else {
-                    alert(response.message); // Hiển thị thông báo lỗi nếu có
-                }
-            });
-        }
-        function buyNow(maKhoaHoc) {
-            $.post('/HocVien/MuaNgay', { id: maKhoaHoc }, function(response) {
-                if (response.success) {
-                    // Chuyển hướng đến trang giỏ hàng sau khi thêm thành công
-                    window.location.href = '/HocVien/GioHang';
-                } else {
-                    alert(response.message);
-                }
-            });
-        }
-
-        function showToast(message) {
-            let toastElement = document.getElementById("toastMessage");
-            let progressBar = document.getElementById("progressBar");
-            toastElement.querySelector(".toast-body").innerText = message;
-            toastElement.style.display = 'block';
-            progressBar.style.width = "100%";
-            progressBar.style.transition = "width 1.5s linear";
-
-            var toast = new bootstrap.Toast(toastElement, { delay: 1500 });
-            toast.show();
-
-            setTimeout(function () {
-                progressBar.style.width = "0%";
-            }, 10);
-        }
-
-        function luuDanhGia(maKhoaHoc) {
-            const rate = $('#rate').val();
-            const nhanXet = $('#nhanXet').val();
-            $.post('/HocVien/LuuDanhGia', { maKhoaHoc: maKhoaHoc, rate: rate, nhanXet: nhanXet }, function (response) {
-                if (response.success) {
-                    $('#danhGiaModal').modal('hide');
-                    const username = response.userName;
-                    const commentDate = new Date().toLocaleDateString();
-                    let existingComment = $('#commentsSection .comment[data-username="' + username + '"]');
-
-                    if (existingComment.length > 0) {
-                        // Nếu bình luận đã tồn tại, cập nhật nội dung của nó
-                        existingComment.find('.rate').text('Đánh giá: ' + rate + ' ⭐');
-                        existingComment.find('.comment-text').text(nhanXet);
-                        existingComment.find('.comment-date').text(commentDate);
-                    } else {
-                        // Nếu bình luận chưa tồn tại, thêm bình luận mới
-                        const newComment = $('<div class="comment mt-3" data-username="' + username + '">');
-                        newComment.append('<p><strong>' + username + '</strong> - <span class="comment-date">' + commentDate + '</span></p>');
-                        newComment.append('<p class="rate">Đánh giá: ' + rate + ' ⭐</p>');
-                        newComment.append('<p class="comment-text">' + nhanXet + '</p>');
-                        newComment.append('<hr>');
-                        $('#commentsSection').prepend(newComment);
-                    }
-                    showToast("Đánh giá của bạn đã được lưu thành công!");
-                    $('#rate').val(5);
-                    $('#nhanXet').val('');
-                } else {
-                    alert(response.message);
-                }
-            });
-        }
-
-        function loadComments(maKhoaHoc) {
-            $.get('/HocVien/LayDanhGiaKhoaHoc', { maKhoaHoc: maKhoaHoc }, function(danhGiaList) {
-                $('#commentsSection').empty(); // Xóa các bình luận cũ để tránh trùng lặp
-
-                // Duyệt qua danh sách các đánh giá và thêm chúng vào phần #commentsSection
-                danhGiaList.forEach(function(danhGia) {
-                    const comment = $('<div class="comment mt-3"></div>');
-                    const userName = $('<p><strong>' + danhGia.UserName + '</strong> - ' + danhGia.NgayDanhGia + '</p>');
-                    const rating = $('<p>Đánh giá: <strong>' + danhGia.Rate + '</strong> <i class="bi bi-star-fill text-warning"></i></p>');
-                    const commentText = $('<p>' + danhGia.NhanXet + '</p>');
-
-                    // Thêm các phần tử vào comment
-                    comment.append(userName, rating, commentText, $('<hr>'));
-
-                    // Thêm phần đánh giá vào #commentsSection
-                    $('#commentsSection').append(comment);
-                });
-            });
-        }
-
-        function getDanhGia(maKhoaHoc) {
-            $.get('/HocVien/GetDanhGia', { maKhoaHoc: maKhoaHoc }, function(response) {
-                if (response.success) {
-                    $('#rate').val(response.data.rate);
-                    $('#nhanXet').val(response.data.nhanXet);
-                } else {
-                    $('#rate').val(5); // Mặc định 5 sao
-                    $('#nhanXet').val('');
-                }
-            });
-        }
-
-        $(document).ready(function() {
-            // Tải các đánh giá khi trang được tải
-            loadComments(@Model.MaKhoaHoc);
-
-            // Hiển thị modal đánh giá
-            $('#danhGiaModal').on('show.bs.modal', function () {
-                getDanhGia(@Model.MaKhoaHoc);
-            });
-        });
-                </script>
-            }
+    
+       

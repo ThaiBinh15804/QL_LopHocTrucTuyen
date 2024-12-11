@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -134,11 +136,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BinhLuan.cs" />
     <Compile Include="Models\DataClasses1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses1.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\GioHang.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -194,25 +198,16 @@
     <Content Include="Content\HinhAnh\KhoaHoc\digital_marketing - Copy.jpg" />
     <Content Include="Content\HinhAnh\KhoaHoc\finance - Copy.jpg" />
     <Content Include="Content\HinhAnh\KhoaHoc\h1 - Copy.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h10 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h10.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h11 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h11.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h12.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h13.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h14.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h2 - Copy.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h3 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h3.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h4 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h4.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h5 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h5.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h7 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h7.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h8 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h8.png" />
-    <Content Include="Content\HinhAnh\KhoaHoc\h9 - Copy.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\h9.png" />
     <Content Include="Content\HinhAnh\KhoaHoc\java.jpg" />
     <Content Include="Content\HinhAnh\KhoaHoc\javascript.jpg" />
@@ -350,6 +345,13 @@
     <Content Include="Views\HocVien\DangKy.cshtml" />
     <Content Include="Views\HocVien\ChiTietThanhToan.cshtml" />
     <Content Include="Views\HocVien\ChiTietKhoaHoc.cshtml" />
+    <Content Include="Views\HocVien\ThongTinThanhToan.cshtml" />
+    <Content Include="Views\HocVien\LoaiKhoaHoc.cshtml" />
+    <Content Include="Views\HocVien\XemBaiTap.cshtml" />
+    <Content Include="Views\HocVien\NopBaiTap.cshtml" />
+    <Content Include="Views\HocVien\BaiGiang.cshtml" />
+    <Content Include="Views\HocVien\XemBinhLuan.cshtml" />
+    <Content Include="Views\HocVien\ChiTietBaiTap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

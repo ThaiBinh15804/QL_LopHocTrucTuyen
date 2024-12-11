@@ -1,5 +1,6 @@
 ﻿@using System.Globalization;
-@model List<QL_LopHocTrucTuyen.Models.KhoaHoc>
+@using QL_LopHocTrucTuyen.Models;
+@model GioHang
 
 <div class="container mt-4">
     <h2 class="mb-4">Thanh toán</h2>
@@ -15,16 +16,33 @@
             <div class="table-responsive">
                 <table class="table">
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.ct)
                         {
                             <tr class="align-items-center">
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="~/Content/HocVien/Images/@item.AnhBia" alt="@item.TenKhoaHoc" class="img-thumbnail me-3" style="width: 60px; height: 60px;">
-                                        <span>@item.TenKhoaHoc</span>
+                                        <img src="~/Content/HinhAnh/KhoaHoc/@item.kh.AnhBia"
+                                             alt="@item.kh.TenKhoaHoc"
+                                             class="img-thumbnail me-3"
+                                             style="width: 60px; height: 60px;">
+                                        <span>@item.kh.TenKhoaHoc</span>
                                     </div>
                                 </td>
-                                <td class="text-end">@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", item.Gia)</td>
+                                <td class="text-end">
+                                    @if (item.gg != null)
+                                    {
+                                        <span class="text-muted me-2" style="text-decoration: line-through;">
+                                            @String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", item.kh.Gia)
+                                        </span>
+                                        <span class="text-danger">
+                                            @String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", item.Tien())
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", item.kh.Gia)
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -32,24 +50,25 @@
             </div>
         </div>
 
+
         <!-- Tóm tắt thanh toán -->
         <div class="col-md-4">
             <div class="border rounded p-3 bg-light">
                 <h4 class="mb-3">Tóm tắt</h4>
                 <div class="d-flex justify-content-between">
                     <span>Giá gốc</span>
-                    <span>@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", ViewBag.TongChiPhi)</span>
+                    <span id="view-total">@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", Model.TongTienChuaGiam())</span>
                 </div>
                 <div class="d-flex justify-content-between fw-bold mt-2">
                     <span>Tổng</span>
-                    <span>@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", ViewBag.TongChiPhi)</span>
+                    <span id="view-total">@String.Format(CultureInfo.InvariantCulture, "{0:N0} đ", Model.TongTien())</span>
                 </div>
+
 
                 <!-- Form hoàn tất thanh toán -->
                 <form action="@Url.Action("HoanTatThanhToan", "HocVien")" method="post">
                     <button type="submit" class="btn btn-primary w-100 mt-3">Hoàn tất thanh toán</button>
                 </form>
-                <p class="text-center text-muted mt-2 mb-0">Đảm bảo hoàn tiền trong 30 ngày</p>
             </div>
         </div>
     </div>

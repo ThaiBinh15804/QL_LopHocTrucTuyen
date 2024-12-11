@@ -7,6 +7,8 @@
     <!-- Sử dụng link Bootstrap và Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
@@ -123,7 +125,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <!-- User Information Display -->
                                 <li class="user-info d-flex align-items-center p-1">
-                                    <img src="~/Content/HocVien/Images/Default_Avatar.png" alt="User Avatar" class="rounded-circle me-3" width="40" height="40">
+                                    <img src="~/Content/HinhAnh/Base/Default_Avatar.png" alt="User Avatar" class="rounded-circle me-3" width="40" height="40">
                                     <div>
                                         <strong>@Session["UserName"]</strong> <!-- Hiển thị tên người dùng -->
                                         <p class="mb-0 text-muted" style="font-size: 0.85rem;">@Session["UserEmail"]</p> <!-- Hiển thị email -->
@@ -133,9 +135,7 @@
                                 <!-- Dropdown Items -->
                                 <li><a class="dropdown-item" href="/HocVien/ThongTinNguoiDung">Tài khoản của tôi</a></li>
                                 <li><a class="dropdown-item" href="/HocVien/GioHang/">Giỏ hàng của tôi</a></li>
-                                <li><a class="dropdown-item" href="#">Cài đặt</a></li>
-                                <li><a class="dropdown-item" href="#">Nâng cấp</a></li>
-                                <li><a class="dropdown-item" href="#">Trung tâm hỗ trợ</a></li>
+                                <li><a class="dropdown-item" href="/HocVien/ThongTinThanhToan">Thông tin thanh toán</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="@Url.Action("DangXuat", "HocVien")">Log Out</a></li>
                             </ul>

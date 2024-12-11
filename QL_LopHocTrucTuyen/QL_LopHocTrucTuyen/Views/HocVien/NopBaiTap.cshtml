@@ -1,0 +1,49 @@
+﻿@model QL_LopHocTrucTuyen.Models.BaiTap
+
+@{
+    ViewBag.Title = "NopBaiTap";
+}
+
+<div class="container mt-4">
+    <h3 class="text-primary text-center mb-4">Nộp bài tập</h3>
+
+    <!-- Hiển thị thông báo nếu có -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success text-center">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center">@TempData["Error"]</div>
+    }
+
+    <form action="@Url.Action("XuLyNopBaiTap", "HocVien")" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="fileUpload" class="form-label">Chọn file bài tập:</label>
+            <input type="file" name="fileUpload" id="fileUpload" class="form-control" required />
+        </div>
+
+        <input type="hidden" name="maBaiTap" value="@ViewBag.MaBaiTap" />
+        <input type="hidden" name="maDK" value="@Session["madk"]" />
+        <div class="mt-3 text-center">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-upload"></i> Nộp bài
+            </button>
+            <a href="@Url.Action("HocTap", "HocVien", new { maBaiTap = ViewBag.MaBaiTap, maDK = Session["madk"]})" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Hủy
+            </a>
+        </div>
+    </form>
+</div>
+<!-- Kiểm tra dung lượng file -->
+<script>
+    document.getElementById("fileUpload").addEventListener("change", function () {
+        const file = this.files[0];
+        const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+        if (file && file.size > maxFileSize) {
+            alert("Dung lượng file vượt quá giới hạn 5MB!");
+            this.value = ""; // Xóa file đã chọn
+        }
+    });
+</script>
