@@ -31,34 +31,9 @@
                                         <li class="list-group-item">
                                             <div class="d-flex align-items-center mb-2">
                                                 <i class="bi bi-play-circle text-secondary me-2"></i>
-                                                @if (baiGiang.Chuong.ThuTu == bght.BaiGiang.Chuong.ThuTu)
-                                                {
-                                                    if (baiGiang.ThuTu <= bght.BaiGiang.ThuTu)
-                                                    {
-                                                        <a href="@Url.Action("BaiGiang", "HocVien", new { id = baiGiang.MaBaiGiang })" class="text-decoration-none">
-                                                            @baiGiang.TenBaiGiang
-                                                        </a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a href="#" , class="text-decoration-none">
-                                                            @baiGiang.TenBaiGiang
-                                                        </a>
-                                                    }
-
-                                                }
-                                                else if (baiGiang.Chuong.ThuTu > bght.BaiGiang.Chuong.ThuTu)
-                                                {
-                                                    <a href="#" , class="text-decoration-none">
-                                                        @baiGiang.TenBaiGiang
-                                                    </a>
-                                                }
-                                                else
-                                                {
-                                                    <a href="@Url.Action("BaiGiang", "HocVien", new { id = baiGiang.MaBaiGiang })" class="text-decoration-none">
-                                                        @baiGiang.TenBaiGiang
-                                                    </a>
-                                                }
+                                                <a href="@Url.Action("BaiGiang", "HocVien", new { id = baiGiang.MaBaiGiang })" class="text-decoration-none">
+                                                    @baiGiang.TenBaiGiang
+                                                </a>
                                             </div>
                                             
                                         </li>
