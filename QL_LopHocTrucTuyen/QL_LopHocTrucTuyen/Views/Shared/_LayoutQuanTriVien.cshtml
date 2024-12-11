@@ -53,43 +53,75 @@
                         </a>
                     </div>
                     <div style="margin-bottom: 25px;">
-                        <a href="/QuanTriVien/LoaiKhoaHoc" onclick="toggleSubMenu('subMenu3')" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
-                            <div style="display: flex; align-items: center; column-gap: 8px;">
-                                <img src="~/Content/HinhAnh/Base/iconSideBar6.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
-                                <span style="font-size: 16px;">Quản lý Loại Khóa học</span>
-                            </div>
-                            <div class="icon_1 icon__visible">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                </svg>
-                            </div>
-                            <div class="icon_2 icon__hidden">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </div>
-                        </a>
+                        @if (Session["user"] != null)
+                        {
+                            NguoiDung user = Session["user"] as NguoiDung;
+                            if (user.MaNhom == "NN004")
+                            {
+                                <button onclick="showPermissionAlert(event)" style="color: #000; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                                    <div style="display: flex; align-items: center; column-gap: 8px;">
+                                        <img src="~/Content/HinhAnh/Base/iconSideBar6.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
+                                        <span style="font-size: 16px; color: red;">Quản lý Loại khóa học</span>
+                                    </div>
+                                </button>
+                            }
+                            else
+                            {
+                                <a href="/QuanTriVien/LoaiKhoaHoc" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                                    <div style="display: flex; align-items: center; column-gap: 8px;">
+                                        <img src="~/Content/HinhAnh/Base/iconSideBar6.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
+                                        <span style="font-size: 16px;">Quản lý Loại khóa học</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </a>
+                            }
+                        }
                     </div>
                     <div style="margin-bottom: 25px;">
-                        <a href="/QuanTriVien/KhoaHoc" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
-                            <div style="display: flex; align-items: center; column-gap: 8px;">
-                                <img src="~/Content/HinhAnh/Base/iconSideBar3.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
-                                <span style="font-size: 16px;">Quản lý Khóa học</span>
-                            </div>
-                            <div class="icon_1 icon__visible">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                </svg>
-                            </div>
-                            <div class="icon_2 icon__hidden">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </div>
-                        </a>
+                        @if (Session["user"] != null)
+                        {
+                            NguoiDung user = Session["user"] as NguoiDung;
+                            if (user.MaNhom == "NN004")
+                            {
+                                <button onclick="showPermissionAlert(event)" style="color: #000; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                                    <div style="display: flex; align-items: center; column-gap: 8px;">
+                                        <img src="~/Content/HinhAnh/Base/iconSideBar3.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
+                                        <span style="font-size: 16px; color: red;">Quản lý Khóa học</span>
+                                    </div>
+                                </button>
+                            }
+                            else
+                            {
+                                <a href="/QuanTriVien/KhoaHoc" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                                    <div style="display: flex; align-items: center; column-gap: 8px;">
+                                        <img src="~/Content/HinhAnh/Base/iconSideBar3.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
+                                        <span style="font-size: 16px;">Quản lý Khóa học</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </a>
+                            }
+                        }
                     </div>
                     <div style="margin-bottom: 25px;">
-                        <a href="javascript:void(0)" onclick="toggleSubMenu('subMenu1')" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                        @if (Session["user"] != null)
+                        {
+                            NguoiDung user = Session["user"] as NguoiDung;
+                            if (user.MaNhom == "NN004")
+                            {
+                                <button onclick="showPermissionAlert(event)" style="color: #000; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                                    <div style="display: flex; align-items: center; column-gap: 8px;">
+                                        <img src="~/Content/HinhAnh/Base/iconSideBar4.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
+                                        <span style="font-size: 16px; color: red">Quản lý Người dùng</span>
+                                    </div>
+                                </button>
+                            }
+                            else
+                            {
+                                 <a href="javascript:void(0)" onclick="toggleSubMenu('subMenu1')" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
                             <div style="display: flex; align-items: center; column-gap: 8px;">
                                 <img src="~/Content/HinhAnh/Base/iconSideBar4.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
                                 <span style="font-size: 16px;">Quản lý Người dùng</span>
@@ -125,6 +157,36 @@
                                 <span style="color: black; font-size: 15px;">Danh sách Học viên</span>
                             </a>
                         </div>
+                            }
+                        }
+                       
+                    </div>
+                    <div style="margin-bottom: 25px;">
+                        @if (Session["user"] != null)
+                        {
+                            NguoiDung user = Session["user"] as NguoiDung;
+                            if (user.MaNhom == "NN005" || user.MaNhom == "NN004")
+                            {
+                                <button onclick="showPermissionAlert(event)" style="color: #000; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                                    <div style="display: flex; align-items: center; column-gap: 8px;">
+                                        <img src="~/Content/HinhAnh/Base/iconSideBar9.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
+                                        <span style="font-size: 16px; color: red;">Quản lý Mã giảm giá</span>
+                                    </div>
+                                </button>
+                            }
+                            else
+                            {
+                                <a href="/QuanTriVien/DanhSachMaGiamGia" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
+                                    <div style="display: flex; align-items: center; column-gap: 8px;">
+                                        <img src="~/Content/HinhAnh/Base/iconSideBar9.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
+                                        <span style="font-size: 16px;">Quản lý Mã giảm giá</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </a>
+                            }
+                        }
                     </div>
                     <div style="margin-bottom: 25px;">
                         @if (Session["user"] != null)
@@ -134,35 +196,8 @@
                             {
                                 <button onclick="showPermissionAlert(event)" style="color: #000; display: flex; align-items: center; justify-content: space-between" class="nav__link">
                                     <div style="display: flex; align-items: center; column-gap: 8px;">
-                                        <img src="~/Content/HinhAnh/Base/iconSideBar9.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
-                                        <span style="font-size: 16px;">Quản lý Mã giảm giá</span>
-                                    </div>
-                                </button>
-                            }
-                            else
-                            {
-                                   <a href="/QuanTriVien/DanhSachMaGiamGia" style="color: black; display: flex; align-items: center; justify-content: space-between" class="nav__link">
-                                        <div style="display: flex; align-items: center; column-gap: 8px;">
-                                            <img src="~/Content/HinhAnh/Base/iconSideBar9.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
-                                            <span style="font-size: 16px;">Quản lý Mã giảm giá</span>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" style="width: 15px; height: 15px;">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                        </svg>
-                                    </a>
-                            }
-                        }
-                    </div>
-                    <div style="margin-bottom: 25px;">
-                       @if (Session["user"] != null)
-                        {
-                            NguoiDung user = Session["user"] as NguoiDung;
-                            if (user.MaNhom == "NN005")
-                            {
-                                <button onclick="showPermissionAlert(event)" style="color: #000; display: flex; align-items: center; justify-content: space-between" class="nav__link">
-                                    <div style="display: flex; align-items: center; column-gap: 8px;">
                                         <img src="~/Content/HinhAnh/Base/iconSideBar5.png" alt="icon dashboard" style="width: 20px; height: 20px;" />
-                                        <span style="font-size: 16px;">Quản lý Thanh toán</span>
+                                        <span style="font-size: 16px; color: red;">Quản lý Thanh toán</span>
                                     </div>
                                 </button>
                             }
@@ -177,8 +212,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                     </svg>
                                 </a>
-                           }
-                       }
+                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -221,11 +256,11 @@
                                 <span>@user.TenDangNhap</span>
                                 if (user.AnhDaiDien != null)
                                 {
-                                     <img src="~/Content/HinhAnh/Avatar/@user.AnhDaiDien" alt="Alternate Text" style="width: 30px; height: 30px; border-radius: 999px;" />
+                                    <img src="~/Content/HinhAnh/Avatar/@user.AnhDaiDien" alt="Alternate Text" style="width: 30px; height: 30px; border-radius: 999px;" />
                                 }
                                 else
                                 {
-                                     <img src="~/Content/HinhAnh/Avatar/user.png" alt="Alternate Text" style="width: 30px; height: 30px; border-radius: 999px;" />
+                                    <img src="~/Content/HinhAnh/Avatar/user.png" alt="Alternate Text" style="width: 30px; height: 30px; border-radius: 999px;" />
                                 }
                             }
                         </div>
@@ -242,7 +277,6 @@
             @RenderBody()
         </div>
     </div>
-<script src="~/Content/QuanTriVienJS.js"></script>
+    <script src="~/Content/QuanTriVienJS.js"></script>
 </body>
 </html>
-
