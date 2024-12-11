@@ -1,0 +1,95 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Đăng Nhập";
+    var toastMessage = TempData["warning"] as string;
+}
+
+<div class="container vh-100 d-flex align-items-center justify-content-center">
+    <div class="row login-container shadow-lg">
+        <!-- Cột bên trái: Hình ảnh minh họa -->
+        <div class="col-md-6 d-none d-md-block p-0">
+            <img src="~/Content/HinhAnh/Base/DangNhap.png" alt="Hình minh họa" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 8px 0 0 8px;">
+        </div>
+        <!-- Cột bên phải: Form đăng nhập -->
+        <div class="col-md-6 p-5">
+            <h3 class="mb-4 text-center">Đăng nhập để tiếp tục hành trình học tập của bạn</h3>
+            <!-- Form đăng nhập -->
+            <form asp-action="Login" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3">Đăng Nhập</button>
+            </form>
+            <!-- Hiển thị lỗi nếu có -->
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+            <p>Bạn chưa có tài khoản? <a href="/HocVien/DangKy" class="text-decoration-none">Đăng ký</a></p>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(toastMessage))
+{
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toastMessage" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @toastMessage
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <!-- Thanh thời gian -->
+            <div class="progress" style="height: 5px;">
+                <div class="progress-bar bg-gradient progress-bar-animated" id="progressBar" role="progressbar" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var toastElement = document.getElementById("toastMessage");
+            var progressBar = document.getElementById("progressBar");
+            var duration = 2000; // Thời gian chạy (3 giây)
+
+            if (toastElement) {
+                var toast = new bootstrap.Toast(toastElement);
+                toast.show();
+
+                // Kích hoạt hoạt ảnh cho thanh tiến độ
+                progressBar.style.transition = "width " + duration + "ms linear";
+                progressBar.style.width = "0%";
+
+                // Tự động ẩn toast sau khi thanh thời gian chạy hết
+                setTimeout(function () {
+                    toast.hide();
+                }, duration);
+            }
+        });
+    </script>
+}
+
+
+<style>
+    .login-container {
+        max-width: 900px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .col-md-6.d-none.d-md-block {
+        height: 100%;
+    }
+</style>
+
+

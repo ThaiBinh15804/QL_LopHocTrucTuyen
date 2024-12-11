@@ -1,0 +1,377 @@
+﻿@model QL_LopHocTrucTuyen.Models.NguoiDung
+
+@{
+    ViewBag.Title = "Thông Tin Người Dùng";
+    Layout = "~/Views/Shared/_LayoutHocVien.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Cột bên trái: Hình đại diện và tên người dùng -->
+        <div class="col-md-3 text-center">
+            <div class="card shadow-sm p-3">
+                <div class="d-flex flex-column align-items-center">
+                    <img id="avatar-img" src="@(string.IsNullOrEmpty(Session["AnhBia"] as string) ? Url.Content("~/Content/HinhAnh/Base/Default_Avatar.png") : Url.Content("~/Content/HinhAnh/Avatar/" + Session["AnhBia"]))"
+                         class="rounded-circle" width="100" height="100" alt="Avatar" />
+
+                    <h4 class="mt-3">@ViewBag.HoTen</h4> <!-- Hiển thị họ tên -->
+                    <!-- Input file ẩn -->
+                    <input type="file" id="fileInput" class="d-none" onchange="uploadImage()" accept="image/*" />
+                    <button class="btn btn-light btn-sm mt-2" onclick="document.getElementById('fileInput').click();">Thay đổi ảnh</button>
+                    <!-- Nút Thay Đổi Mật Khẩu dưới hình đại diện -->
+                    <button id="changePasswordButton" class="btn btn-link mt-2" style="text-decoration: underline; color: blue;">Đổi mật khẩu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột bên phải: Thông tin chi tiết -->
+        <div class="col-md-9">
+            <!-- Phần Hồ Sơ -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Hồ Sơ học viên</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Input hidden để lưu User ID -->
+                    <input type="hidden" id="maNguoiDung" value="@Session["UserId"]" />
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label for="hoTen" class="form-label" style="font-weight:bold">Họ tên:</label>
+                            <input type="text" id="hoTen" class="form-control" value="@ViewBag.HoTen" />
+                            <label for="ngaySinh" class="form-label" style="font-weight: bold;">Ngày sinh:</label>
+                            <input type="date" id="ngaySinh" class="form-control" value="@(ViewBag.NgaySinh != "Chưa xác định" && !string.IsNullOrEmpty(ViewBag.NgaySinh) ? Convert.ToDateTime(ViewBag.NgaySinh).ToString("yyyy-MM-dd") : "")" />
+                        </div>
+                        <div class="col-md-5">
+                            <label for="gioiTinh" class="form-label" style="font-weight:bold">Giới tính:</label>
+                            <input type="text" id="gioiTinh" class="form-control" value="@ViewBag.GioiTinh" />
+                            <label for="diaChi" class="form-label" style="font-weight:bold">Địa chỉ:</label>
+                            <input type="text" id="diaChi" class="form-control" value="@ViewBag.DiaChi" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Ngôn ngữ:</strong> Tiếng Việt (Vietnamese)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Khu vực:</strong> Việt Nam</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thêm nút Lưu và Hủy -->
+                <div class="d-flex justify-content-center my-1" style="margin-right: 150px;">
+                    <button id="saveButton" type="button" class="btn btn-primary me-3" disabled>Lưu</button>
+                    <button id="cancelButton" type="button" class="btn btn-secondary" disabled>Hủy</button>
+                </div>
+            </div>
+
+            <!-- Phần Địa Chỉ Email Của Tôi -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Địa Chỉ Email Của Tôi</h5>
+                </div>
+                <div class="card-body">
+                    <p>Bạn có thể sử dụng các địa chỉ email sau đây để đăng nhập vào tài khoản của bạn và đặt lại mật khẩu nếu bạn quên.</p>
+                    <div class="d-flex align-items-center">
+                        <img src="~/Content/HinhAnh/Base/email-icon.png" width="20" alt="Email icon" class="me-2" />
+                        <p class="mb-0" id="email">@ViewBag.Email <span class="text-muted"> - Đã xác thực</span></p>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-success btn-sm" id="editEmailButton">Cập nhật Email</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Số Điện Thoại Của Tôi</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Bạn có thể sử dụng số điện thoại dưới đây để đăng nhập vào tài khoản của bạn và nhận thông báo nếu cần.</p>
+                    <div class="d-flex align-items-center">
+                        <img src="~/Content/HinhAnh/Base/phone-icon.png" width="20" alt="Phone icon" class="me-2" />
+                        <p class="mb-0" id="soDienThoai">@ViewBag.SoDienThoai <span class="text-muted"> - Đã xác thực</span></p>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-success btn-sm" id="editPhoneButton">Cập nhật Số Điện Thoại</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal để chỉnh sửa Email -->
+<div id="editEmailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập Nhật Địa Chỉ Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Cập nhật lại địa chỉ email của bạn</p>
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="newEmail" class="mb-1">Nhập địa chỉ email của bạn</label>
+                        <input type="email" id="newEmail" class="form-control" placeholder="Nhập địa chỉ email" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveEmailButton">Lưu</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal để chỉnh sửa Số Điện Thoại -->
+<div id="editPhoneModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập Nhật Số Điện Thoại</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="phoneForm">
+                    <div class="form-group">
+                        <label for="newPhone" class="mb-1">Nhập số điện thoại của bạn</label>
+                        <input type="text" id="newPhone" class="form-control" placeholder="Nhập số điện thoại" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="savePhoneButton">Thêm</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal để Thay Đổi Mật Khẩu -->
+<div id="changePasswordModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đổi Mật Khẩu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Mật khẩu hiện tại</label>
+                        <input type="password" id="currentPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Mật khẩu mới</label>
+                        <input type="password" id="newPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPassword">Xác nhận mật khẩu mới</label>
+                        <input type="password" id="confirmNewPassword" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="savePasswordButton">Đổi mật khẩu</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        const saveButton = $('#saveButton');
+        const cancelButton = $('#cancelButton');
+
+        // Disable buttons initially
+        saveButton.prop('disabled', true);
+        cancelButton.prop('disabled', true);
+
+        // Enable buttons when có thay đổi input
+        $('#hoTen, #ngaySinh, #gioiTinh, #diaChi').on('input', function () {
+            saveButton.prop('disabled', false);
+            cancelButton.prop('disabled', false);
+        });
+
+        // Reload trang khi nhấn Hủy
+        cancelButton.on('click', function () {
+            window.location.reload();
+        });
+
+        // Cập nhật thông tin khi nhấn Lưu
+        saveButton.on('click', function () {
+            const data = {
+                hoTen: $('#hoTen').val(),
+                ngaySinh: $('#ngaySinh').val(),
+                gioiTinh: $('#gioiTinh').val(),
+                diaChi: $('#diaChi').val()
+            };
+
+            $.ajax({
+                url: '/HocVien/ChinhSua',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    alert(response.message);
+                    if (response.success) {
+                        window.location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi khi cập nhật thông tin.');
+                }
+            });
+        });
+
+        // Hiển thị modal khi nhấn vào nút "Cập nhật Email"
+        $('#editEmailButton').on('click', function () {
+            $('#editEmailModal').modal('show');
+        });
+
+        // Xử lý khi nhấn nút "Lưu" trong modal để lưu email mới
+        $('#saveEmailButton').on('click', function () {
+            const newEmail = $('#newEmail').val();
+
+            if (newEmail) {
+                $.ajax({
+                    url: '/HocVien/ChinhSuaEmail', // Đảm bảo bạn đã tạo phương thức ChinhSuaEmail trong controller
+                    type: 'POST',
+                    data: JSON.stringify({ email: newEmail }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        alert(response.message);
+                        if (response.success) {
+                            $('#editEmailModal').modal('hide'); // Đóng modal sau khi lưu thành công
+                            $('#email').text(newEmail + " - Đã xác thực"); // Cập nhật email mới trên giao diện
+                        }
+                    },
+                    error: function () {
+                        alert('Đã xảy ra lỗi khi cập nhật địa chỉ email.');
+                    }
+                });
+            } else {
+                alert("Vui lòng nhập địa chỉ email hợp lệ.");
+            }
+        });
+
+        // Hiển thị modal khi nhấn vào nút "Cập nhật Số Điện Thoại"
+        $('#editPhoneButton').on('click', function () {
+            $('#editPhoneModal').modal('show');
+        });
+
+        // Xử lý khi nhấn nút "Lưu" trong modal để lưu số điện thoại mới
+        $('#savePhoneButton').on('click', function () {
+            const newPhone = $('#newPhone').val();
+
+            if (newPhone) {
+                $.ajax({
+                    url: '/HocVien/ChinhSuaSoDienThoai', // Đảm bảo bạn đã tạo phương thức ChinhSuaSoDienThoai trong controller
+                    type: 'POST',
+                    data: JSON.stringify({ soDienThoai: newPhone }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        alert(response.message);
+                        if (response.success) {
+                            $('#editPhoneModal').modal('hide'); // Đóng modal sau khi lưu thành công
+                            $('#soDienThoai').text(newPhone + " - Đã xác thực"); // Cập nhật số điện thoại mới trên giao diện
+                        }
+                    },
+                    error: function () {
+                        alert('Đã xảy ra lỗi khi cập nhật số điện thoại.');
+                    }
+                });
+            } else {
+                alert("Vui lòng nhập số điện thoại hợp lệ.");
+            }
+        });
+
+        // Sự kiện để hiển thị modal khi nhấn "Thay đổi mật khẩu"
+        $('#changePasswordButton').on('click', function () {
+            $('#changePasswordModal').modal('show');
+        });
+
+        // Xử lý khi nhấn nút "Đổi mật khẩu" trong modal
+        $('#savePasswordButton').on('click', function () {
+            const currentPassword = $('#currentPassword').val();
+            const newPassword = $('#newPassword').val();
+            const confirmNewPassword = $('#confirmNewPassword').val();
+
+            if (newPassword !== confirmNewPassword) {
+                alert("Mật khẩu mới và xác nhận mật khẩu không khớp.");
+                return;
+            }
+
+            $.ajax({
+                url: '/HocVien/DoiMatKhau',
+                type: 'POST',
+                data: JSON.stringify({ currentPassword: newPassword }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    alert(response.message);
+                    if (response.success) {
+                        $('#changePasswordModal').modal('hide');
+                        $('#currentPassword').val('');
+                        $('#newPassword').val('');
+                        $('#confirmNewPassword').val('');
+                    }
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi khi đổi mật khẩu.');
+                }
+            });
+        });
+        // Đóng modal khi nhấn nút Đóng hoặc nút X
+        $('.close, [data-dismiss="modal"]').on('click', function () {
+            $('#editEmailModal, #editPhoneModal,#changePasswordModal').modal('hide');
+        });
+    });
+
+    // Hàm để upload ảnh
+    function uploadImage() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        if (file) {
+            var formData = new FormData();
+            formData.append("avatar", file);
+
+            $.ajax({
+                url: '/HocVien/UploadAvatar',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $('#avatar-img').attr('src', '/Content/HocVien/Images/' + response.filename);
+                        alert("Ảnh đã được cập nhật thành công!");
+                    } else {
+                        alert("Có lỗi xảy ra khi tải lên ảnh.");
+                    }
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi khi tải lên ảnh.");
+                }
+            });
+        }
+    }
+</script>
+
+
+

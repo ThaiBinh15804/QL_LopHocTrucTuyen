@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <!-- Sử dụng link Bootstrap và Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1;
+        }
+        /* Footer styling to stay at the bottom */
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        /* Hover cho các mục trong Thanh Điều Hướng (Navbar) */
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+
+            .nav-link:hover {
+                color: #ffc107 !important;
+                text-decoration: none;
+            }
+        /* Hover effect for dropdown items */
+        .dropdown-menu .dropdown-item:hover {
+            font-weight: bold; /* Làm chữ đậm */
+            color: #000;
+            background-color: #f0f0f0;
+        }
+        /* Điều chỉnh dropdown menu */
+        .navbar .dropdown-menu {
+            right: 0;
+            left: auto;
+            min-width: 200px;
+        }
+        /* Dropdown on hover */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        /* Đổ bóng dưới nav */
+        .navbar {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white mb-0">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="~/Content/HinhAnh/Base/education-high-resolution-logo.png" alt="Logo" width="65" height="65" class="d-inline-block" />
+                <span class="ms-3" style="font-weight:bold">Student</span>
+            </a>
+            <!-- Navigation Links (Trang chủ, Học tập, Thông tin) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/HocVien/TrangChu">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/HocVien/HocTap">Học tập</a>
+                    </li>
+
+                </ul>
+                <!-- Kiểm tra nếu người dùng chưa đăng nhập -->
+                @if (Session["User"] == null)
+                {
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-dark me-2" href="/HocVien/DangNhap">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-dark" href="/HocVien/DangKy">Đăng ký</a>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <!-- Search Bar và Icons khi người dùng đã đăng nhập -->
+                    <form action="@Url.Action("TimKiemKhoaHoc", "HocVien")" method="get" class="d-flex position-relative" style="max-width: 250px;">
+                        <input class="form-control rounded-pill pe-5" type="search" name="query" placeholder="Search" aria-label="Search" style="padding-right: 45px;">
+                        <button type="submit" class="btn position-absolute" style="right: 0px; top: 50%; transform: translateY(-50%); background-color: #007bff; border: none; border-radius: 50%; padding: 6px 8px;">
+                            <i class="bi bi-search" style="color: white; font-size: 1rem;"></i>
+                        </button>
+                    </form>
+
+                    <ul class="navbar-nav ms-3 d-flex align-items-center">
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="#"><i class="bi bi-heart text-danger" style="font-size: 1.5rem;"></i></a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="/HocVien/GioHang/"><i class="bi bi-cart text-dark" style="font-size: 1.5rem;"></i></a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="#"><i class="bi bi-bell text-warning" style="font-size: 1.5rem;"></i></a>
+                        </li>
+                        <!-- Dropdown Profile -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle text-secondary" style="font-size: 2rem;"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <!-- User Information Display -->
+                                <li class="user-info d-flex align-items-center p-1">
+                                    <img src="~/Content/HinhAnh/Base/Default_Avatar.png" alt="User Avatar" class="rounded-circle me-3" width="40" height="40">
+                                    <div>
+                                        <strong>@Session["UserName"]</strong> <!-- Hiển thị tên người dùng -->
+                                        <p class="mb-0 text-muted" style="font-size: 0.85rem;">@Session["UserEmail"]</p> <!-- Hiển thị email -->
+                                    </div>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- Dropdown Items -->
+                                <li><a class="dropdown-item" href="/HocVien/ThongTinNguoiDung">Tài khoản của tôi</a></li>
+                                <li><a class="dropdown-item" href="/HocVien/GioHang/">Giỏ hàng của tôi</a></li>
+                                <li><a class="dropdown-item" href="/HocVien/ThongTinThanhToan">Thông tin thanh toán</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="@Url.Action("DangXuat", "HocVien")">Log Out</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <div class="container-fluid content px-0 mx-0">
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <!-- Social Media Icons -->
+        <div class="mb-3">
+            <a href="#" class="me-3"><i class="bi bi-facebook text-primary" style="font-size: 2rem;"></i></a>
+            <a href="#" class="me-3"><i class="bi bi-linkedin text-info" style="font-size: 2rem;"></i></a>
+            <a href="#" class="me-3"><i class="bi bi-youtube text-danger" style="font-size: 2rem;"></i></a>
+            <a href="#" class="me-3"><i class="bi bi-github text-dark" style="font-size: 2rem;"></i></a>
+            <a href="#"><i class="bi bi-twitter text-info" style="font-size: 2rem;"></i></a>
+        </div>
+        <!-- Copyright Text -->
+        <div>
+            <p>© 2024 Copyright: Bình - Khánh - Thuận</p>
+        </div>
+    </footer>
+    @RenderSection("Scripts", required: false)
+    <!-- Thêm Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
